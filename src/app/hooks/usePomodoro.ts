@@ -33,18 +33,26 @@ export function usePomodoro(initial: PomodoroConfig) {
     }
   }, [state.isRunning, config])
 
-  // Se il timer è fermo, aggiorna il display in base alla config corrente
+  // cambio config
+  // ref e aggiornamento ref
+  const isRunningRef = useRef<boolean>(state.isRunning)
+
   useEffect(() => {
-    if (!state.isRunning) {
-      setState((s) => ({
-        ...s,
-        timeLeft:
-          s.phase === 'Session'
-            ? config.sessionLength * 60
-            : config.breakLength * 60,
-      }))
-    }
-  }, [config.sessionLength, config.breakLength, state.isRunning, state.phase])
+    isRunningRef.current = state.isRunning
+  }, [state.isRunning])
+
+  useEffect(() => {
+    // Se sta correndo, non toccare il timeLeft
+    if (isRunningRef.current) return
+
+    const target =
+      state.phase === 'Session'
+        ? config.sessionLength * 60
+        : config.breakLength * 60
+
+    // Aggiorna solo se serve
+    setState((s) => (s.timeLeft === target ? s : { ...s, timeLeft: target }))
+  }, [config.sessionLength, config.breakLength, state.phase])
 
   const clamp = (v: number) => Math.min(60, Math.max(1, v))
   const actions = {
