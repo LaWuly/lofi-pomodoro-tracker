@@ -1,7 +1,7 @@
 import { usePomodoro } from './app/hooks/usePomodoro'
 
 export default function App() {
-  const { state, config, setState, setConfig } = usePomodoro({
+  const { state, config, actions } = usePomodoro({
     sessionLength: 25,
     breakLength: 5,
   })
@@ -14,66 +14,27 @@ export default function App() {
       <p>Time: {state.timeLeft}</p>
       <p>Running: {String(state.isRunning)}</p>
 
-      <div>
-        <button onClick={() => setState((s) => ({ ...s, isRunning: true }))}>
-          Start
-        </button>
-        <button onClick={() => setState((s) => ({ ...s, isRunning: false }))}>
-          Pausa
-        </button>
-        <button
-          onClick={() =>
-            setState((s) => ({
-              ...s,
-              isRunning: false,
-              timeLeft: 25 * 60,
-              phase: 'Session',
-            }))
-          }
-        >
-          Reset
-        </button>
+      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+        {state.isRunning ? (
+          <button onClick={actions.pause}>Pausa</button>
+        ) : (
+          <button onClick={actions.start}>Start</button>
+        )}
+
+        <button onClick={actions.reset}>Reset</button>
       </div>
 
       <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-        <button
-          onClick={() =>
-            setConfig((c) => ({
-              ...c,
-              sessionLength: Math.min(60, c.sessionLength + 1),
-            }))
-          }
-        >
+        <button onClick={actions.incSession} disabled={state.isRunning}>
           + Session
         </button>
-        <button
-          onClick={() =>
-            setConfig((c) => ({
-              ...c,
-              sessionLength: Math.max(1, c.sessionLength - 1),
-            }))
-          }
-        >
+        <button onClick={actions.decSession} disabled={state.isRunning}>
           - Session
         </button>
-        <button
-          onClick={() =>
-            setConfig((c) => ({
-              ...c,
-              breakLength: Math.min(60, c.breakLength + 1),
-            }))
-          }
-        >
+        <button onClick={actions.incBreak} disabled={state.isRunning}>
           + Break
         </button>
-        <button
-          onClick={() =>
-            setConfig((c) => ({
-              ...c,
-              breakLength: Math.max(1, c.breakLength - 1),
-            }))
-          }
-        >
+        <button onClick={actions.decBreak} disabled={state.isRunning}>
           - Break
         </button>
       </div>
