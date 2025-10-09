@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { usePomodoro } from './app/hooks/usePomodoro'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { state, config, actions } = usePomodoro({
+    sessionLength: 25,
+    breakLength: 5,
+  })
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main>
+      <h1>Test</h1>
+
+      <p>Phase: {state.phase}</p>
+      <p>Time: {state.timeLeft}</p>
+      <p>Running: {String(state.isRunning)}</p>
+
+      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+        {state.isRunning ? (
+          <button onClick={actions.pause}>Pausa</button>
+        ) : (
+          <button onClick={actions.start}>Start</button>
+        )}
+
+        <button onClick={actions.reset}>Reset</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+
+      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+        <button onClick={actions.incSession} disabled={state.isRunning}>
+          + Session
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button onClick={actions.decSession} disabled={state.isRunning}>
+          - Session
+        </button>
+        <button onClick={actions.incBreak} disabled={state.isRunning}>
+          + Break
+        </button>
+        <button onClick={actions.decBreak} disabled={state.isRunning}>
+          - Break
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
-
-export default App
