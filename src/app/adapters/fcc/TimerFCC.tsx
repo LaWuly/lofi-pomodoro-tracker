@@ -23,6 +23,10 @@ export function TimerFCC() {
     setCfg((c) => ({ ...c, sessionLength: clamp(c.sessionLength + 1) }))
   const decSession = () =>
     setCfg((c) => ({ ...c, sessionLength: clamp(c.sessionLength - 1) }))
+  const onReset = () => {
+    setCfg({ sessionLength: 25, breakLength: 5, ringHoldSec: 1 })
+    reset()
+  }
 
   return (
     <div>
@@ -74,7 +78,7 @@ export function TimerFCC() {
         <button id="start_stop" onClick={toggleRun}>
           {state.isRunning ? 'Pause' : 'Start'}
         </button>
-        <button id="reset" onClick={reset}>
+        <button id="reset" onClick={onReset}>
           Reset
         </button>
 
