@@ -1,68 +1,101 @@
+/* src/index.css — base globale + token tema alba/crepuscolo */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Noto Color Emoji;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Palette — ALBA / MATTINO (tema chiaro) */
+  --bg: #fdf3e9;
+  --text: #2d2540;
+  --muted: #756b85;
+
+  /* Accenti generali */
+  --primary: #8f7bff;
+  --accent: #ffbfa3;
+  --danger: #ff8fa0;
+  --ring: #c6b4ff;
+
+  /* Ombre */
+  --shadow: 0 10px 32px rgba(30, 20, 10, .16);
+
+  /* Gradiente cielo alba */
+  --bg-grad: radial-gradient(90% 120% at 70% 0%,
+      #ffe2b8 0%,
+      #fbe9d7 35%,
+      #f3efff 100%);
+
+  /* Card per fasi */
+  --card-session: linear-gradient(180deg, #fff9f2 0%, #fff3ea 100%);
+  --card-break: linear-gradient(180deg, #f2f7ff 0%, #eaf2ff 100%);
+
+  /* Bordi card */
+  --card-session-border: rgba(255, 170, 120, .35);
+  --card-break-border: rgba(120, 160, 255, .35);
+
+  --panel: #fffaf7;
+  --elev: 200ms ease;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+:root[data-theme="dark"] {
+  /* Palette — CREPUSCOLO / NOTTE (tema scuro) */
+  --bg: #131229;
+  --text: #efe9ff;
+  --muted: #b8acd3;
+
+  --primary: #b39aff;
+  --accent: #ff9ab7;
+  --danger: #ff7a8d;
+  --ring: #a890ff;
+
+  --shadow: 0 12px 36px rgba(0, 0, 0, .45);
+
+  /* Gradiente cielo crepuscolo → notte */
+  --bg-grad: radial-gradient(120% 140% at 50% -10%,
+      #ff9ab7 0%,
+      #3a2a6b 48%,
+      #0e0d20 100%);
+
+  /* Card per fasi (tono crepuscolare) */
+  --card-session: linear-gradient(180deg, #1e1a3a 0%, #2a234f 100%);
+  --card-break: linear-gradient(180deg, #15253d 0%, #102033 100%);
+
+  --card-session-border: rgba(180, 150, 255, .35);
+  --card-break-border: rgba(120, 170, 255, .35);
+
+  --panel: #1b1734;
 }
-a:hover {
-  color: #535bf2;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  color: var(--text);
+  background: var(--bg-grad);
+  transition: background var(--elev), color var(--elev);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Bottoni base (fallback globale) */
 button {
-  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Ring focus globale */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
