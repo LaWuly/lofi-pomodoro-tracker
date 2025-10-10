@@ -1,77 +1,79 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import {
+  initialState,
+  tick,
+  reset as resetEngine,
+} from '@domain/timer/TimerEngine'
 import type { PomodoroConfig, PomodoroState } from '@domain/timer/types'
-import { initialState, tick, reset } from '@domain/timer/TimerEngine'
 
-export function usePomodoro(initial: PomodoroConfig) {
-  const [config, setConfig] = useState<PomodoroConfig>(initial)
-  const [state, setState] = useState<PomodoroState>(() => initialState(initial))
+export function usePomodoro(cfg: PomodoroConfig) {
+  const [state, setState] = useState<PomodoroState>(() => initialState(cfg))
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const prevRingingRef = useRef(false)
 
-  // Contenitore per l'intervallo
-  const intervalRef = useRef<number | null>(null)
+  // 1. Clock
+  const { sessionLength, breakLength, ringHoldSec } = cfg
 
   useEffect(() => {
-    // Se sta girando && NON ho ancora un interval, lo creo
-    if (state.isRunning && intervalRef.current == null) {
-      intervalRef.current = window.setInterval(() => {
-        // Ogni secondo applico la funzione pura tick -> nuovo stato
-        setState((s) => tick(s, config))
-      }, 1000)
+    if (!state.isRunning) return
+
+    const configSnap: PomodoroConfig = {
+      sessionLength,
+      breakLength,
+      ringHoldSec,
     }
 
-    // Se è in pausa && ho un interval attivo, lo spengo
-    if (!state.isRunning && intervalRef.current != null) {
-      window.clearInterval(intervalRef.current)
-      intervalRef.current = null
-    }
+    const id = window.setInterval(() => {
+      setState((prev) => tick(prev, configSnap))
+    }, 1000)
 
-    // Cleanup quando il componente si smonta o cambiano deps
-    return () => {
-      if (intervalRef.current != null) {
-        window.clearInterval(intervalRef.current)
-        intervalRef.current = null
+    return () => window.clearInterval(id)
+  }, [state.isRunning, sessionLength, breakLength, ringHoldSec])
+
+  // 2. Beep quando entri in ring
+  useEffect(() => {
+    const justEntered = state.isRinging && !prevRingingRef.current
+    if (justEntered) {
+      const a = audioRef.current
+      if (a) {
+        try {
+          a.currentTime = 0
+          void a.play()
+        } catch {
+          // alcuni browser richiedono interazione utente: ok per FCC
+        }
       }
     }
-  }, [state.isRunning, config])
+    prevRingingRef.current = state.isRinging
+  }, [state.isRinging])
 
-  // cambio config
-  // ref e aggiornamento ref
-  const isRunningRef = useRef<boolean>(state.isRunning)
+  // 3. Sync timeLeft quando cambi le durate, solo in pausa
+  const isRunningRef = useRef(state.isRunning)
 
   useEffect(() => {
     isRunningRef.current = state.isRunning
   }, [state.isRunning])
 
   useEffect(() => {
-    // Se sta correndo, non toccare il timeLeft
     if (isRunningRef.current) return
 
     const target =
-      state.phase === 'Session'
-        ? config.sessionLength * 60
-        : config.breakLength * 60
+      state.phase === 'Session' ? cfg.sessionLength * 60 : cfg.breakLength * 60
 
-    // Aggiorna solo se serve
     setState((s) => (s.timeLeft === target ? s : { ...s, timeLeft: target }))
-  }, [config.sessionLength, config.breakLength, state.phase])
+  }, [cfg.sessionLength, cfg.breakLength, state.phase])
 
-  const clamp = (v: number) => Math.min(60, Math.max(1, v))
-  const actions = {
-    //avvio, pausa, reset del timer
-    start: () => setState((s) => ({ ...s, isRunning: true })),
-    pause: () => setState((s) => ({ ...s, isRunning: false })),
-    reset: () => setState((s) => reset(s, config)),
-
-    //Modifiche break/session in minuti
-    incBreak: () =>
-      setConfig((c) => ({ ...c, breakLength: clamp(c.breakLength + 1) })),
-    decBreak: () =>
-      setConfig((c) => ({ ...c, breakLength: clamp(c.breakLength - 1) })),
-
-    incSession: () =>
-      setConfig((c) => ({ ...c, sessionLength: clamp(c.sessionLength + 1) })),
-    decSession: () =>
-      setConfig((c) => ({ ...c, sessionLength: clamp(c.sessionLength - 1) })),
+  // 4. API minime per la UI
+  const toggleRun = () => setState((s) => ({ ...s, isRunning: !s.isRunning }))
+  const reset = () => {
+    setState((prev) => resetEngine(prev, cfg))
+    prevRingingRef.current = false
+    const a = audioRef.current
+    if (a) {
+      a.pause()
+      a.currentTime = 0
+    }
   }
 
-  return { state, config, actions }
+  return { state, toggleRun, reset, audioRef }
 }
