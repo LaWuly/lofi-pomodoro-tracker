@@ -5,6 +5,7 @@ export type Phase = 'Session' | 'Break'
 export interface PomodoroConfig {
   sessionLength: number
   breakLength: number
+  ringHoldSec?: number
 }
 
 // PomodoroState: lo stato vivo del timer.
@@ -13,6 +14,8 @@ export interface PomodoroState {
   phase: Phase
   timeLeft: number
   isRunning: boolean
+  isRinging: boolean
+  ringLeft: number
 }
 
-export const minutesToSeconds = (m: number) => m * 60
+export const minutesToSeconds = (m: number) => Math.max(0, Math.floor(m)) * 60
