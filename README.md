@@ -1,27 +1,30 @@
-# Lofi Pomodoro Tracker (v0.1)
+# Lofi Pomodoro Tracker → Life Tracker
 
-Timer **25+5** sviluppato con **React + TypeScript + Vite**.  
-Questa prima versione implementa il **core timer locale**, base per il futuro _Life Tracker_.
+Timer **25 + 5** sviluppato con **React + TypeScript + Vite**.  
+Questa prima versione (**v1.0.0**) completa i **requisiti FCC** ed è la base del futuro _Life Tracker_ con log, musica chill e minigiochi.
 
 ---
 
-## Funzionalità attuali (v0.1)
+## Funzionalità attuali (v1.0.0)
 
 - Start / Pausa / Reset
-- Switch automatico tra _Session_ e _Break_ allo 0
-- Limiti 1..60 minuti per entrambe le durate
+- Switch automatico tra _Session_ ↔ _Break_ allo 0
+- Formato tempo **mm:ss** con durata di default 25/5 min
+- Limiti: 1 – 60 min per entrambe le fasi
 - Pulsanti ± disabilitati durante il run
-- Logica separata in moduli (`domain` / `app`) per una futura estensione
+- **Beep audio** e **hold su 00:00 ≥ 1 s** prima del cambio fase
+- Logica separata in moduli (`domain` / `app`) per scalabilità futura
 
 ---
 
 ## Stack tecnico
 
-- **React 18 + TypeScript (Vite)**
-- ESLint + Prettier (code quality)
-- Architettura modulare con:
-  - `/domain`: logica pura del timer (`TimerEngine`, tipi, util)
-  - `/app`: hook React (`usePomodoro`) e componenti UI
+- **React 18 + TypeScript + Vite**
+- Architettura modulare
+  - `/domain` → logica pura del timer (`TimerEngine`, tipi, util)
+  - `/app` → hook React (`usePomodoro`) e componenti UI
+- **ESLint + Prettier** → code quality
+- **CSS Modules** → stile isolato e riutilizzabile
 
 ---
 
