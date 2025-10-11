@@ -43,22 +43,34 @@ La home mostra una **griglia di app** che funge da hub:
 
 ---
 
+### V1.2 — Routing + Lazy Loading
+
+Le app sotto `/apps/*` sono caricate on-demand con `React.lazy` + `Suspense`.
+Rotte: `/apps/clock`, `/apps/calculator`, `/apps/markdown`, `/apps/journal`, `/apps/drum`.
+Fallback accessibile “Loading app…”. (Rewrite SPA per deploy in V1.2.1)
+
+---
+
 ## Roadmap
 
 **v1.0.0 — Requisiti FCC**
 
 - 25+5 completo: 00:00 mostrato ≥ 1s, beep audio, ID FCC conformi
 
-**v1.1.0 — Hub a griglia + routing (questa versione)**
+**v1.1.0 — Hub a griglia + routing**
 
 - Home a griglia con 5 card (Timer, Calculator, Markdown, Journal, Drum)
 - Navigazione via route `/apps/*` (client-side, senza refresh)
 - Accessibilità: aria-label sulle card, focus ring visibile, tab order sensato
 - Il Timer FCC è ora disponibile in `/apps/clock` (invariato nella logica)
 
+**v1.2.0 — Routing + Lazy Loading**
+
+- `React.lazy` + `Suspense` per `/apps/*`
+- Fallback accessibile e deep-link funzionanti
+
 Prossime milestone:
 
-- v1.2 — Router /apps/\* con **lazy loading**
 - v1.3 — Calculator (FCC completa)
 - v1.4 — Markdown Previewer (FCC)
 - v1.5 — Journal (MVP) con storage locale
