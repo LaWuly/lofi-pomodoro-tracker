@@ -1,22 +1,61 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
 import { GridHub } from '@app/components/Grid/GridHub'
-import { ClockPage } from '@app/clock/ClockPage'
+import { LoadingApp } from '@app/components/LoadingApp'
 
-// Stub temporanei (creali se non li hai ancora)
-import { CalculatorStub } from '@app/calculator/CalculatorStub'
-import { MarkdownStub } from '@app/markdown/MarkdownStub'
-import { JournalStub } from '@app/journal/JournalStub'
-import { DrumStub } from '@app/drum/DrumStub'
+const ClockApp = lazy(() => import('../app/clock'))
+const CalculatorApp = lazy(() => import('../app/calculator'))
+const MarkdownApp = lazy(() => import('../app/markdown'))
+const JournalApp = lazy(() => import('../app/journal'))
+const DrumApp = lazy(() => import('../app/drum'))
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<GridHub />} />
-      <Route path="/apps/clock" element={<ClockPage />} />
-      <Route path="/apps/calculator" element={<CalculatorStub />} />
-      <Route path="/apps/markdown" element={<MarkdownStub />} />
-      <Route path="/apps/journal" element={<JournalStub />} />
-      <Route path="/apps/drum" element={<DrumStub />} />
+
+      <Route
+        path="/apps/clock"
+        element={
+          <Suspense fallback={<LoadingApp />}>
+            <ClockApp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/apps/calculator"
+        element={
+          <Suspense fallback={<LoadingApp />}>
+            <CalculatorApp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/apps/markdown"
+        element={
+          <Suspense fallback={<LoadingApp />}>
+            <MarkdownApp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/apps/journal"
+        element={
+          <Suspense fallback={<LoadingApp />}>
+            <JournalApp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/apps/drum"
+        element={
+          <Suspense fallback={<LoadingApp />}>
+            <DrumApp />
+          </Suspense>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
