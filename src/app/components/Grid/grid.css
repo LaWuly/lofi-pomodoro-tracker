@@ -1,0 +1,55 @@
+.hub {
+    min-height: 100dvh;
+    display: grid;
+    gap: 16px;
+    place-items: start center;
+    padding: 24px;
+}
+
+.hub__title {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    margin: 0 0 8px;
+}
+
+.grid {
+    --size: 180px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+    gap: 16px;
+    width: min(980px, 92vw);
+}
+
+.card {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 8px;
+    padding: 20px;
+    text-decoration: none;
+    border-radius: 12px;
+    background: var(--panel, #151515);
+    color: var(--text, #fff);
+    box-shadow: var(--shadow, 0 2px 12px rgba(0, 0, 0, .25));
+    min-height: 140px;
+    outline: none;
+    border: 1px solid color-mix(in srgb, #fff 10%, transparent);
+}
+
+.card:hover {
+    transform: translateY(-1px);
+    transition: transform .12s ease;
+}
+
+.card:focus-visible {
+    box-shadow: 0 0 0 3px #88c0ff;
+}
+
+.card__emoji {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.card__title {
+    font-weight: 600;
+    font-size: 1rem;
+}
