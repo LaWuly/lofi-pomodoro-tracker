@@ -1,5 +1,4 @@
-import { CalculatorStub } from './CalculatorStub'
-
-export default function CalculatorApp() {
-  return <CalculatorStub />
+import CalculatorFCC from '@app/adapters/fcc/CalculatorFCC'
+export default function CalculatorPage() {
+  return <CalculatorFCC />
 }
