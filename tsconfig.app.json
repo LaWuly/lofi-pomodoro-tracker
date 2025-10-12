@@ -10,7 +10,8 @@
     "baseUrl": "./src",
     "paths": {
       "@domain/*": ["domain/*"],
-      "@app/*": ["app/*"]
+      "@app/*": ["app/*"],
+      "@routes/*": ["routes/*"]
     },
 
     /* Bundler mode */
