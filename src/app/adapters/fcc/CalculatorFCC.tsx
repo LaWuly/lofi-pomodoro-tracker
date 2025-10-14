@@ -1,28 +1,20 @@
-import { useState } from 'react'
+import { useCalculator } from '@app/hooks/useCalculator'
 
 export default function CalculatorFCC() {
-  const [expr, setExpr] = useState('0')
-
-  // 2) Handler per i numeri (0..9)
-  const onDigit = (d: string) => {
-    setExpr((prev) => {
-      if (prev === '0') return d
-      return prev + d
-    })
-  }
+  const { state, onDigit, onDecimal, onClear } = useCalculator()
 
   return (
     <section aria-label="Calcolatrice FCC">
-      <div id="display">{expr}</div>
+      <div>{state.opLine}</div>
+      <div id="display">{state.display}</div>
 
       <div className="grid">
-        <button id="clear">AC</button>
-        <button id="divide">÷</button>
-        <button id="multiply">×</button>
-        <button id="subtract">−</button>
-        <button id="add">+</button>
-        <button id="equals">=</button>
-        <button id="decimal">.</button>
+        <button id="clear" onClick={onClear}>
+          AC
+        </button>
+        <button id="divide">/</button>
+        <button id="multiply">x</button>
+        <button id="subtract">-</button>
 
         <button id="seven" onClick={() => onDigit('7')}>
           7
@@ -33,6 +25,7 @@ export default function CalculatorFCC() {
         <button id="nine" onClick={() => onDigit('9')}>
           9
         </button>
+        <button id="add">+</button>
 
         <button id="four" onClick={() => onDigit('4')}>
           4
@@ -43,6 +36,7 @@ export default function CalculatorFCC() {
         <button id="six" onClick={() => onDigit('6')}>
           6
         </button>
+        <button id="equals">=</button>
 
         <button id="one" onClick={() => onDigit('1')}>
           1
@@ -52,6 +46,9 @@ export default function CalculatorFCC() {
         </button>
         <button id="three" onClick={() => onDigit('3')}>
           3
+        </button>
+        <button id="decimal" onClick={onDecimal}>
+          .
         </button>
 
         <button id="zero" onClick={() => onDigit('0')}>
