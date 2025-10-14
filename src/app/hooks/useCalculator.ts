@@ -7,16 +7,25 @@ import { formatOut } from '@domain/calculator/types'
 import { evalL2R } from '@domain/calculator/CalculatorEngine'
 
 export function useCalculator() {
-  // Buffer numero corrente (display) + linea formula
   const [cur, setCur] = useState('0')
   const [opLine, setOpLine] = useState('')
   const [mode, setMode] = useState<Mode>('idle')
   const [pendingOp, setPendingOp] = useState<Op | null>(null)
 
   // --- Input numerico -------------------------------------------------
+  const resetFromError = (next: string, nextMode: Mode = 'typing') => {
+    setOpLine('')
+    setCur(next)
+    setMode(nextMode)
+  }
+
   const onDigit = useCallback(
     (d: string) => {
       setCur((prev) => {
+        if (prev === 'Error') {
+          resetFromError(d)
+          return d
+        }
         if (mode === 'result') {
           setOpLine('')
           setMode('typing')
@@ -33,6 +42,10 @@ export function useCalculator() {
 
   const onDecimal = useCallback(() => {
     setCur((prev) => {
+      if (prev === 'Error') {
+        resetFromError('0.')
+        return '0.'
+      }
       if (mode === 'result') {
         setOpLine('')
         setMode('typing')
@@ -52,32 +65,60 @@ export function useCalculator() {
 
   // --- '-' come segno -------------------------------------------------
   const applyMinusAsSign = useCallback(() => {
+    if (cur === 'Error') {
+      resetFromError('-')
+      return true
+    }
     if (mode === 'idle') {
       setCur((prev) => (prev === '0' ? '-0' : prev === '' ? '-' : prev))
       setMode('typing')
       return true
     }
     return false
-  }, [mode])
+  }, [mode, cur])
 
   // --- Operatori ------------------------------------------------------
   const onOp = useCallback(
     (op: Op) => {
+      if (cur === 'Error') {
+        resetFromError('0', 'idle') /* continua */
+      }
+
+      // dopo "=", inizia nuovo calcolo dal risultato e azzera buffer
       if (mode === 'result') {
         setOpLine(`${cur} ${op}`)
         setPendingOp(op)
+        setCur('0')
         setMode('idle')
         return
       }
+
+      // prova a usare '-' come segno
       if (op === '-' && applyMinusAsSign()) return
+
       if (mode === 'typing') {
+        // se stavo digitando solo il segno ('-0') e premo un altro operatore:
+        // ignoro il segno e SOSTITUISCO l'operatore precedente
+        if (cur === '-0') {
+          setOpLine((prev) =>
+            prev
+              ? prev.replace(/([+\-x/])\s*$/, ` ${op}`)
+              : `${formatOut(0)} ${op}`,
+          )
+          setCur('0')
+          setMode('idle')
+          return
+        }
+
         setOpLine((prev) => `${prev}${prev ? ' ' : ''}${cur} ${op}`)
         setPendingOp(op)
         setMode('idle')
         setCur('0')
         return
       }
-      setOpLine((prev) => prev.replace(/([+\-x/])\s*$/, '') + op)
+
+      // sostituisci l'ultimo operatore con l'ultimo premuto
+      setOpLine((prev) => prev.replace(/([+\-x/])\s*$/, ` ${op}`))
       setPendingOp(op)
     },
     [mode, cur, applyMinusAsSign],
@@ -85,6 +126,10 @@ export function useCalculator() {
 
   // --- equals ---------------------------------------------------------
   const onEquals = useCallback(() => {
+    if (cur === 'Error') {
+      resetFromError('0', 'result')
+      return
+    }
     const base = opLine.trim()
     const parts = base ? base.split(/\s+/) : []
     if (mode === 'typing') parts.push(cur)
