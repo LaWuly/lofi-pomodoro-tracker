@@ -1,0 +1,97 @@
+/* Wrapper centrato + card coerente col timer */
+.wrapper {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding-top: 5vh;
+}
+
+.card {
+    width: min(760px, 92vw);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(125, 136, 158, .18);
+    background: var(--panel);
+    transition: background var(--elev), border-color var(--elev), transform 120ms ease;
+}
+
+/* Formula e display */
+.formula {
+    text-align: right;
+    opacity: .7;
+    min-height: 20px;
+    margin-bottom: 6px;
+}
+
+.display {
+    border: 1px solid rgba(125, 136, 158, .25);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(24px, 4.6vw, 40px);
+    background: rgba(255, 255, 255, .55);
+    margin-bottom: 14px;
+}
+
+:root[data-theme="dark"] .display {
+    background: rgba(255, 255, 255, .08);
+}
+
+/* Tastiera */
+.keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.btn {
+    min-height: 48px;
+    padding: 10px 12px;
+    font-size: 1.05rem;
+    line-height: 1;
+    border-radius: 10px;
+    border: 1px solid rgba(125, 136, 158, .25);
+    background: rgba(255, 255, 255, .55);
+    backdrop-filter: blur(6px);
+    transition: transform 100ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+:root[data-theme="dark"] .btn {
+    background: rgba(255, 255, 255, .08);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.op {
+    border-color: rgba(140, 120, 255, .45);
+}
+
+.eq {
+    border-color: rgba(120, 200, 140, .45);
+}
+
+.clr {
+    border-color: rgba(255, 120, 140, .45);
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+/* filler invisibile per allineamento griglia quando serve */
+.filler {
+    visibility: hidden;
+}
