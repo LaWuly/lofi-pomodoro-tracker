@@ -1,15 +1,15 @@
-// Hook UI: gestisce buffer, modalità e costruzione opLine (senza calcolo)
+// Hook UI: buffer, linea formula e calcolo L2R
 
 import { useCallback, useState } from 'react'
 import type { CalcState, Mode, Op } from '@domain/calculator/types'
+import { formatOut } from '@domain/calculator/types'
+import { evalL2R } from '@domain/calculator/CalculatorEngine'
 
 export function useCalculator() {
   // Buffer numero corrente (display) + linea formula
   const [cur, setCur] = useState('0')
   const [opLine, setOpLine] = useState('')
   const [mode, setMode] = useState<Mode>('idle')
-
-  // Operatore in attesa (usato poi in E6 per il calcolo)
   const [pendingOp, setPendingOp] = useState<Op | null>(null)
 
   // --- Input numerico -------------------------------------------------
@@ -62,34 +62,48 @@ export function useCalculator() {
   // --- Operatori (+ - x /) --------------------------------------------
   const onOp = useCallback(
     (op: Op) => {
-      // Dopo '=', inizia una nuova espressione partendo dalla result **visibile**
       if (mode === 'result') {
         setOpLine(`${cur} ${op}`)
         setPendingOp(op)
         setMode('idle')
-        // mantengo il display sulla result; si azzererà quando inizi a digitare
         return
       }
-
-      // '-' come segno del numero che sta per arrivare
       if (op === '-' && applyMinusAsSign()) return
-
       if (mode === 'typing') {
-        // Chiudo il numero corrente in opLine e passo in idle per il prossimo input
         setOpLine((prev) => `${prev}${prev ? ' ' : ''}${cur} ${op}`)
         setPendingOp(op)
         setMode('idle')
         setCur('0')
         return
       }
-
-      // mode === 'idle' → sostituzione dell'ultimo operatore
       setOpLine((prev) => prev.replace(/([+\-x/])\s*$/, '') + op)
       setPendingOp(op)
     },
     [mode, cur, applyMinusAsSign],
   )
 
+  // --- equals ---------------------------------------------------------
+  const onEquals = useCallback(() => {
+    const base = opLine.trim()
+    const parts = base ? base.split(/\s+/) : []
+    if (mode === 'typing') parts.push(cur)
+    if (!parts.length) parts.push(cur)
+
+    const val = evalL2R(parts as (string | Op)[])
+    const out = formatOut(val)
+
+    const lineBeforeEq = base
+      ? mode === 'typing'
+        ? `${base} ${cur}`
+        : base
+      : cur
+    setOpLine(`${lineBeforeEq} =`)
+
+    setCur(out)
+    setPendingOp(null)
+    setMode('result')
+  }, [opLine, cur, mode])
+
   const state: CalcState = { opLine, display: cur }
-  return { state, onDigit, onDecimal, onClear, onOp }
+  return { state, onDigit, onDecimal, onClear, onOp, onEquals }
 }

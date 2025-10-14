@@ -3,7 +3,7 @@
 import { useCalculator } from '@app/hooks/useCalculator'
 
 export default function CalculatorFCC() {
-  const { state, onDigit, onDecimal, onClear, onOp } = useCalculator()
+  const { state, onDigit, onDecimal, onClear, onOp, onEquals } = useCalculator()
 
   return (
     <section
@@ -30,7 +30,7 @@ export default function CalculatorFCC() {
         {state.display}
       </div>
 
-      {/* Griglia pulsanti 4 colonne */}
+      {/* griglia pulsanti */}
       <div
         className="grid"
         style={{
@@ -39,7 +39,6 @@ export default function CalculatorFCC() {
           gap: 8,
         }}
       >
-        {/* Comandi */}
         <button id="clear" onClick={onClear}>
           AC
         </button>
@@ -53,7 +52,6 @@ export default function CalculatorFCC() {
           -
         </button>
 
-        {/* 7 8 9 + */}
         <button id="seven" onClick={() => onDigit('7')}>
           7
         </button>
@@ -67,7 +65,6 @@ export default function CalculatorFCC() {
           +
         </button>
 
-        {/* 4 5 6 = (handler = in E6) */}
         <button id="four" onClick={() => onDigit('4')}>
           4
         </button>
@@ -77,9 +74,10 @@ export default function CalculatorFCC() {
         <button id="six" onClick={() => onDigit('6')}>
           6
         </button>
-        <button id="equals">=</button>
+        <button id="equals" onClick={onEquals}>
+          =
+        </button>
 
-        {/* 1 2 3 . */}
         <button id="one" onClick={() => onDigit('1')}>
           1
         </button>
@@ -93,7 +91,6 @@ export default function CalculatorFCC() {
           .
         </button>
 
-        {/* 0 (span 2) + filler per allineamento */}
         <button
           id="zero"
           onClick={() => onDigit('0')}
