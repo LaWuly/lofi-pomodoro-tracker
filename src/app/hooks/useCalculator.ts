@@ -10,7 +10,6 @@ export function useCalculator() {
   const [cur, setCur] = useState('0')
   const [opLine, setOpLine] = useState('')
   const [mode, setMode] = useState<Mode>('idle')
-  const [pendingOp, setPendingOp] = useState<Op | null>(null)
 
   // --- Input numerico -------------------------------------------------
   const resetFromError = (next: string, nextMode: Mode = 'typing') => {
@@ -60,7 +59,6 @@ export function useCalculator() {
     setCur('0')
     setOpLine('')
     setMode('idle')
-    setPendingOp(null)
   }, [])
 
   // --- '-' come segno -------------------------------------------------
@@ -87,7 +85,6 @@ export function useCalculator() {
       // dopo "=", inizia nuovo calcolo dal risultato e azzera buffer
       if (mode === 'result') {
         setOpLine(`${cur} ${op}`)
-        setPendingOp(op)
         setCur('0')
         setMode('idle')
         return
@@ -111,7 +108,6 @@ export function useCalculator() {
         }
 
         setOpLine((prev) => `${prev}${prev ? ' ' : ''}${cur} ${op}`)
-        setPendingOp(op)
         setMode('idle')
         setCur('0')
         return
@@ -119,7 +115,6 @@ export function useCalculator() {
 
       // sostituisci l'ultimo operatore con l'ultimo premuto
       setOpLine((prev) => prev.replace(/([+\-x/])\s*$/, ` ${op}`))
-      setPendingOp(op)
     },
     [mode, cur, applyMinusAsSign],
   )
@@ -146,7 +141,6 @@ export function useCalculator() {
     setOpLine(`${lineBeforeEq} =`)
 
     setCur(out)
-    setPendingOp(null)
     setMode('result')
   }, [opLine, cur, mode])
 
