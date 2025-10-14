@@ -1,6 +1,7 @@
-// Hook UI: buffer, linea formula e calcolo L2R
+// Hook UI: buffer, linea formula, calcolo L2R, input tastiera
 
 import { useCallback, useState } from 'react'
+import type { KeyboardEventHandler } from 'react'
 import type { CalcState, Mode, Op } from '@domain/calculator/types'
 import { formatOut } from '@domain/calculator/types'
 import { evalL2R } from '@domain/calculator/CalculatorEngine'
@@ -49,7 +50,7 @@ export function useCalculator() {
     setPendingOp(null)
   }, [])
 
-  // --- '-' come segno dopo operatore/all'inizio -----------------------
+  // --- '-' come segno -------------------------------------------------
   const applyMinusAsSign = useCallback(() => {
     if (mode === 'idle') {
       setCur((prev) => (prev === '0' ? '-0' : prev === '' ? '-' : prev))
@@ -59,7 +60,7 @@ export function useCalculator() {
     return false
   }, [mode])
 
-  // --- Operatori (+ - x /) --------------------------------------------
+  // --- Operatori ------------------------------------------------------
   const onOp = useCallback(
     (op: Op) => {
       if (mode === 'result') {
@@ -104,6 +105,39 @@ export function useCalculator() {
     setMode('result')
   }, [opLine, cur, mode])
 
+  // --- tastiera -------------------------------------------------------
+  const onKeyDown: KeyboardEventHandler<HTMLElement> = (e) => {
+    const k = e.key
+    if (/\d/.test(k)) {
+      onDigit(k)
+      return
+    }
+    if (k === '.') {
+      onDecimal()
+      return
+    }
+    if (k === 'Enter' || k === '=') {
+      e.preventDefault()
+      onEquals()
+      return
+    }
+    if (k === 'Escape') {
+      onClear()
+      return
+    }
+    if (k === '+' || k === '-' || k === '*' || k === '/' || k === 'x') {
+      const map: Record<string, Op> = {
+        '+': '+',
+        '-': '-',
+        '*': 'x',
+        '/': '/',
+        x: 'x',
+      }
+      onOp(map[k])
+      return
+    }
+  }
+
   const state: CalcState = { opLine, display: cur }
-  return { state, onDigit, onDecimal, onClear, onOp, onEquals }
+  return { state, onDigit, onDecimal, onClear, onOp, onEquals, onKeyDown }
 }

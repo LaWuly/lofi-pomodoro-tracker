@@ -1,21 +1,22 @@
-// Adapter FCC: rende la UI con gli id richiesti dai test
+// Adapter FCC: id richiesti + supporto tastiera (focus sul container)
 
 import { useCalculator } from '@app/hooks/useCalculator'
 
 export default function CalculatorFCC() {
-  const { state, onDigit, onDecimal, onClear, onOp, onEquals } = useCalculator()
+  const { state, onDigit, onDecimal, onClear, onOp, onEquals, onKeyDown } =
+    useCalculator()
 
   return (
     <section
       aria-label="Calcolatrice FCC"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
       style={{ display: 'grid', gap: 12, maxWidth: 320, margin: '0 auto' }}
     >
-      {/* Formula corrente */}
       <div style={{ textAlign: 'right', opacity: 0.7, minHeight: 20 }}>
         {state.opLine}
       </div>
 
-      {/* Display FCC */}
       <div
         id="display"
         aria-live="polite"
@@ -30,7 +31,6 @@ export default function CalculatorFCC() {
         {state.display}
       </div>
 
-      {/* griglia pulsanti */}
       <div
         className="grid"
         style={{
