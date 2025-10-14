@@ -1,21 +1,59 @@
+// Adapter FCC: rende la UI con gli id richiesti dai test
+
 import { useCalculator } from '@app/hooks/useCalculator'
 
 export default function CalculatorFCC() {
-  const { state, onDigit, onDecimal, onClear } = useCalculator()
+  const { state, onDigit, onDecimal, onClear, onOp } = useCalculator()
 
   return (
-    <section aria-label="Calcolatrice FCC">
-      <div>{state.opLine}</div>
-      <div id="display">{state.display}</div>
+    <section
+      aria-label="Calcolatrice FCC"
+      style={{ display: 'grid', gap: 12, maxWidth: 320, margin: '0 auto' }}
+    >
+      {/* Formula corrente */}
+      <div style={{ textAlign: 'right', opacity: 0.7, minHeight: 20 }}>
+        {state.opLine}
+      </div>
 
-      <div className="grid">
+      {/* Display FCC */}
+      <div
+        id="display"
+        aria-live="polite"
+        style={{
+          border: '1px solid #444',
+          borderRadius: 8,
+          padding: 12,
+          textAlign: 'right',
+          fontSize: '1.8rem',
+        }}
+      >
+        {state.display}
+      </div>
+
+      {/* Griglia pulsanti 4 colonne */}
+      <div
+        className="grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 8,
+        }}
+      >
+        {/* Comandi */}
         <button id="clear" onClick={onClear}>
           AC
         </button>
-        <button id="divide">/</button>
-        <button id="multiply">x</button>
-        <button id="subtract">-</button>
+        <button id="divide" onClick={() => onOp('/')}>
+          /
+        </button>
+        <button id="multiply" onClick={() => onOp('x')}>
+          x
+        </button>
+        <button id="subtract" onClick={() => onOp('-')}>
+          -
+        </button>
 
+        {/* 7 8 9 + */}
         <button id="seven" onClick={() => onDigit('7')}>
           7
         </button>
@@ -25,8 +63,11 @@ export default function CalculatorFCC() {
         <button id="nine" onClick={() => onDigit('9')}>
           9
         </button>
-        <button id="add">+</button>
+        <button id="add" onClick={() => onOp('+')}>
+          +
+        </button>
 
+        {/* 4 5 6 = (handler = in E6) */}
         <button id="four" onClick={() => onDigit('4')}>
           4
         </button>
@@ -38,6 +79,7 @@ export default function CalculatorFCC() {
         </button>
         <button id="equals">=</button>
 
+        {/* 1 2 3 . */}
         <button id="one" onClick={() => onDigit('1')}>
           1
         </button>
@@ -51,9 +93,16 @@ export default function CalculatorFCC() {
           .
         </button>
 
-        <button id="zero" onClick={() => onDigit('0')}>
+        {/* 0 (span 2) + filler per allineamento */}
+        <button
+          id="zero"
+          onClick={() => onDigit('0')}
+          style={{ gridColumn: 'span 2' }}
+        >
           0
         </button>
+        <div style={{ visibility: 'hidden' }} />
+        <div style={{ visibility: 'hidden' }} />
       </div>
     </section>
   )
