@@ -1,4 +1,3 @@
-// src/domain/markdown/sample.ts
 export const DEFAULT_MD = `# Hello Markdown!
 
 > *Scrivi a sinistra • vedi l'anteprima a destra*
@@ -19,4 +18,7 @@ console.log('Hello World!')
 
 ## Citazione
 > “Markdown è semplice ma potente.”
+
+## Immagine
+![Logo React](https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg)
 `
