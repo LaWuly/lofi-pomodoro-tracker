@@ -1,0 +1,190 @@
+/* --- Layout 2 colonne fullscreen --------------------------------------- */
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100dvh;
+    width: 100%;
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+/* --- Card coerenti con Timer/Calculator -------------------------------- */
+.card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(125, 136, 158, .18);
+    background: var(--panel);
+    transition: background var(--elev), border-color var(--elev), transform 120ms ease;
+    min-height: 0;
+}
+
+/* Header card */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(125, 136, 158, .18);
+}
+
+.title {
+    font-size: clamp(16px, 2.8vw, 20px);
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.kbd {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Corpo card (area scrollabile) */
+.body {
+    padding: 12px 14px;
+    overflow: auto;
+    min-height: 0;
+}
+
+/* --- EDITOR ------------------------------------------------------------- */
+:global(#editor) {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(125, 136, 158, .25);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .55);
+    color: inherit;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: .75rem;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+:root[data-theme="dark"] :global(#editor) {
+    background: rgba(255, 255, 255, .08);
+}
+
+/* Focus a11y */
+:global(#editor:focus-visible),
+.preview:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+}
+
+/* --- PREVIEW ------------------------------------------------------------ */
+.preview {
+    border: 1px solid rgba(125, 136, 158, .25);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .55);
+    padding: .75rem;
+    min-height: 100%;
+}
+
+:root[data-theme="dark"] .preview {
+    background: rgba(255, 255, 255, .08);
+}
+
+/* Tipografia markdown */
+.preview :where(h1, h2, h3) {
+    margin: .6em 0 .4em;
+    line-height: 1.25;
+}
+
+.preview h1 {
+    font-size: clamp(22px, 4vw, 32px);
+}
+
+.preview h2 {
+    font-size: clamp(18px, 3.2vw, 26px);
+}
+
+.preview h3 {
+    font-size: clamp(16px, 2.8vw, 22px);
+}
+
+.preview p,
+.preview ul,
+.preview ol,
+.preview blockquote,
+.preview pre {
+    margin: .6em 0;
+}
+
+.preview ul,
+.preview ol {
+    padding-left: 1.4em;
+}
+
+.preview a {
+    color: var(--link, #3b82f6);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.preview code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: rgba(125, 136, 158, .15);
+    padding: .1em .35em;
+    border-radius: 4px;
+    font-size: .95em;
+}
+
+.preview pre {
+    background: rgba(17, 24, 39, .85);
+    color: #e5e7eb;
+    border-radius: 10px;
+    padding: .75rem .9rem;
+    overflow-x: auto;
+}
+
+:root[data-theme="dark"] .preview pre {
+    background: rgba(255, 255, 255, .12);
+    color: #f3f4f6;
+}
+
+.preview blockquote {
+    border-left: 4px solid rgba(125, 136, 158, .35);
+    padding-left: .75rem;
+    color: var(--muted);
+    background: rgba(125, 136, 158, .08);
+    border-radius: 6px;
+}
+
+.preview img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: .5rem 0;
+}
+
+/* Scrollbar tenue */
+.preview::-webkit-scrollbar,
+:global(#editor::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+}
+
+.preview::-webkit-scrollbar-thumb,
+:global(#editor::-webkit-scrollbar-thumb) {
+    background: rgba(125, 136, 158, .4);
+    border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+}

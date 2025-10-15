@@ -1,6 +1,5 @@
-// src/app/markdown/index.tsx
 import MarkdownFCC from '@app/adapters/fcc/MarkdownFCC'
 
-export default function MarkdownApp() {
+export default function MarkdownPage() {
   return <MarkdownFCC />
 }
