@@ -1,0 +1,119 @@
+/* Layout generale */
+.wrapper {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 5vh 0;
+    background: var(--bg, #f7f8fa);
+}
+
+/* Card principale */
+.card {
+    width: min(900px, 94vw);
+    background: var(--panel, #fff);
+    border: 1px solid rgba(125, 136, 158, 0.18);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow, 0 4px 10px rgba(0, 0, 0, 0.05));
+    display: grid;
+    gap: 1.5rem;
+    transition: background var(--elev), border-color var(--elev);
+}
+
+/* Header (titolo + pulsanti) */
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: space-between;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+/* Nav elenco date */
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.nav button {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.nav button[aria-current="page"] {
+    border-color: var(--accent, #646cff);
+    background: rgba(100, 108, 255, 0.08);
+}
+
+/* Area editor */
+.editor {
+    display: grid;
+    gap: 1rem;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 240px;
+}
+
+/* Preview Markdown */
+.preview {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    background: var(--panel, #fff);
+    overflow: auto;
+}
+
+/* Mood selector */
+.moodGroup {
+    display: flex;
+    gap: 8px;
+}
+
+.moodBtn {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.moodBtn[aria-pressed="true"] {
+    border-color: var(--accent, #646cff);
+    background: rgba(100, 108, 255, 0.08);
+}
+
+/* Responsive layout con preview */
+@media (min-width: 780px) {
+    .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+}
