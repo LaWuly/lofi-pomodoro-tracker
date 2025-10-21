@@ -1,5 +1,4 @@
-import { JournalStub } from './JournalStub'
-
+import Journal from './Journal'
 export default function JournalApp() {
-  return <JournalStub />
+  return <Journal />
 }
