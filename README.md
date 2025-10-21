@@ -1,11 +1,11 @@
 # Lofi Pomodoro Tracker → Life Tracker
 
-Timer **25 + 5** e **Calculator FCC** sviluppati con **React + TypeScript + Vite**.  
-Le versioni **v1.0 → v1.3** completano i **requisiti FreeCodeCamp** e costituiscono la base del futuro _Life Tracker_ con log, musica chill e minigiochi.
+Timer **25 + 5**, **Calculator FCC** e **Journal (MVP)** sviluppati con **React + TypeScript + Vite**.  
+Le versioni **v1.0 → v1.5** completano i **requisiti FreeCodeCamp** e introducono le prime funzioni del futuro _Life Tracker_ con log, musica chill e minigiochi.
 
 ---
 
-## Funzionalità attuali (v1.3.0)
+## Funzionalità attuali (v1.5.0)
 
 ### Timer (25 + 5 Clock)
 
@@ -26,14 +26,29 @@ Le versioni **v1.0 → v1.3** completano i **requisiti FreeCodeCamp** e costitui
 - Formattazione output (`Error`, `∞`, arrotondamento a 12 cifre)
 - Layout e focus ring coerenti con il TimerFCC (CSS Modules, a11y)
 
+### Journal (v1.5.0)
+
+> MVP con mood tracker, note Plain/Markdown e stub Pomodoro / Workout / Ciclo
+
+- Creazione e salvataggio note giornaliere (`localStorage`)
+- Selettore umore 1–5 con emoji
+- Formato testo **Plain / Markdown** + anteprima live
+- Accessibilità base: focus visibile, `aria-pressed`, tab order coerente
+- Stub visivi per:
+  - 📋 Log attività Pomodoro (integrazione futura col timer)
+  - 🏋️ Workout tracker (allenamenti)
+  - 🌙 Cycle tracker (monitoraggio ciclo)
+- Tipi e hook dedicati (`useJournal`, `JournalEntry`)
+- Stile coerente con il resto dell’app (card, grid, focus ring)
+
 ---
 
 ## Stack tecnico
 
 - **React 18 + TypeScript + Vite**
 - Architettura modulare
-  - `/domain` → logica pura (TimerEngine, CalculatorEngine, tipi, util)
-  - `/app` → hook React e UI FCC
+  - `/domain` → logica pura (TimerEngine, CalculatorEngine, parser Markdown)
+  - `/app` → hook React, UI FCC e moduli Journal
 - **ESLint + Prettier** → code quality
 - **CSS Modules** → stile isolato e riutilizzabile
 - **Netlify-ready**: SPA rewrite (`public/_redirects`) + prefetch chunk
@@ -46,9 +61,9 @@ La home mostra una **griglia di app** che funge da hub:
 
 - ⏱ Timer → `/apps/clock`
 - 🧮 Calculator → `/apps/calculator`
-- 📓 Markdown → `/apps/markdown` (stub)
-- 📔 Journal → `/apps/journal` (stub)
-- 🥁 Drum → `/apps/drum` (stub)
+- 📓 Markdown → `/apps/markdown`
+- 📔 Journal → `/apps/journal`
+- 🥁 Drum → `/apps/drum`
 
 **Accessibilità:** card con `aria-label`, **focus** visibile, navigazione da tastiera (TAB / ENTER / SPACE).
 
@@ -77,13 +92,23 @@ La home mostra una **griglia di app** che funge da hub:
 - Stile coerente con TimerFCC (card, grid, btn, focus ring)
 - Tutti i test FCC passati ✅
 
-Prossime milestone:
+**v1.4.0 — Markdown Previewer (FCC)**  
+Split pane editor/preview, parser Markdown leggero e sanitizer base  
+Tema coerente col resto dell’app
 
-- v1.4 — Markdown Previewer (FCC)
-- v1.5 — Journal (MVP) con storage locale
-- v1.6 — Drum Machine (FCC)
-- v2.0 — UX & storage preferenze globali
-- v3.0 — Player lofi + auto-switch con Pomodoro
+**v1.5.0 — Journal (MVP)**  
+Mood tracker, note Plain/Markdown, storage locale e stub Pomodoro/Workout/Ciclo ✅
+
+---
+
+## Prossime milestone
+
+- **v1.6 — Drum Machine (FCC)**  
+  9 pad interattivi con suoni e key bindings
+- **v2.0 — UX & storage preferenze globali**  
+  Tema, editor e ultima pagina salvata
+- **v3.0 — Player lofi + auto-switch Pomodoro**  
+  Audio controller e playlist dinamiche
 
 ---
 
