@@ -1,7 +1,7 @@
 # Lofi Pomodoro Tracker → Life Tracker
 
 Timer **25 + 5**, **Calculator FCC** e **Journal (MVP)** sviluppati con **React + TypeScript + Vite**.  
-Le versioni **v1.0 → v1.5** completano i **requisiti FreeCodeCamp** e introducono le prime funzioni del futuro _Life Tracker_ con log, musica chill e minigiochi.
+Le versioni **v1.0 → v1.5** completano i **requisiti FreeCodeCamp** e pongono le basi del futuro _Life Tracker_, un hub di mini-app con log unificato, musica chill e funzioni per benessere e produttività.
 
 ---
 
@@ -103,12 +103,46 @@ Mood tracker, note Plain/Markdown, storage locale e stub Pomodoro/Workout/Ciclo 
 
 ## Prossime milestone
 
-- **v1.6 — Drum Machine (FCC)**  
-  9 pad interattivi con suoni e key bindings
-- **v2.0 — UX & storage preferenze globali**  
-  Tema, editor e ultima pagina salvata
-- **v3.0 — Player lofi + auto-switch Pomodoro**  
-  Audio controller e playlist dinamiche
+### v2.x — Life Tracker Core
+
+**v2.0.0 — Journal Hub (spina dorsale)**  
+Modello dati unificato (`id, date, source, tag[], durata, note, mood`)  
+Journal con lista, filtro e dettaglio; editor Plain/Markdown integrato
+
+**v2.1.0 — Pomodoro + Task di sessione**  
+To-do per sessione, auto-log nel Journal con durata e tag (`#studio`, `#lavoro`)
+
+**v2.2.0 — Audio Focus/Break**  
+Player interno con playlist locali, switch automatico Session/Break, volume persistente
+
+**v2.3.0 — Workout Tiles (MVP)**  
+Sequenze esercizi personalizzabili, timer circuito, log su Journal
+
+**v2.4.0 — Cycle Tracker (base)**  
+Timeline stati base (mestruazioni, ovulazione, finestra fertile), note e privacy toggle
+
+**v2.5.0 — Ricettario + Planner settimanale**  
+Gestione ricette → pasti → lista spesa automatica; base per dieta equilibrata
+
+**v2.6.0 — Meditazione (timer + campanella)**  
+Timer con suono inizio/fine, pacer respiro opzionale, streak giornaliera, log nel Journal
+
+**v2.7.0 — Report & Export**  
+Statistiche settimanali/mensili e esportazione CSV/JSON per tutti i log
+
+**v2.8.0 — Impostazioni & Backup**  
+Tema, lingua, unità, reset dati e backup/import locale
+
+---
+
+## Criteri globali di “Done”
+
+- Nessun errore TypeScript / console
+- ESLint + Prettier OK
+- Accessibilità base (focus, tastiera, label)
+- Dati salvati e ripristinati dove previsto
+- README aggiornato + screenshot
+- Build Vite OK e deploy stabile (Netlify/Vercel)
 
 ---
 
