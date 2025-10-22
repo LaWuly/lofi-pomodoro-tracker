@@ -15,37 +15,51 @@ const cards: Card[] = [
   {
     slug: 'clock',
     to: '/apps/clock',
-    label: 'Apri 25+5 Clock',
     emoji: '⏱',
     title: 'Timer',
-  },
-  {
-    slug: 'calculator',
-    to: '/apps/calculator',
-    label: 'Apri Calculator (FCC)',
-    emoji: '🧮',
-    title: 'Calculator',
-  },
-  {
-    slug: 'markdown',
-    to: '/apps/markdown',
-    label: 'Apri Markdown Previewer',
-    emoji: '📓',
-    title: 'Markdown',
+    label: 'Apri Timer 25+5',
   },
   {
     slug: 'journal',
     to: '/apps/journal',
-    label: 'Apri Journal',
     emoji: '📔',
     title: 'Journal',
+    label: 'Apri Journal',
   },
   {
-    slug: 'drum',
-    to: '/apps/drum',
-    label: 'Apri Drum Machine',
-    emoji: '🥁',
-    title: 'Drum',
+    slug: 'workout',
+    to: '/apps/workout',
+    emoji: '🏋️',
+    title: 'Workout',
+    label: 'Apri Workout',
+  },
+  {
+    slug: 'cycle',
+    to: '/apps/cycle',
+    emoji: '🌙',
+    title: 'Cycle Tracker',
+    label: 'Apri Cycle Tracker',
+  },
+  {
+    slug: 'recipes',
+    to: '/apps/recipes',
+    emoji: '🥗',
+    title: 'Ricettario',
+    label: 'Apri Ricettario',
+  },
+  {
+    slug: 'meditation',
+    to: '/apps/meditation',
+    emoji: '🧘',
+    title: 'Meditazione',
+    label: 'Apri Meditazione',
+  },
+  {
+    slug: 'archive',
+    to: '/apps/archive',
+    emoji: '🎮',
+    title: 'Archivio',
+    label: 'Apri Archivio FCC',
   },
 ]
 
@@ -56,7 +70,7 @@ export function GridHub() {
       <nav className="grid" aria-label="App disponibili">
         {cards.map((c) => (
           <Link
-            key={c.to}
+            key={c.slug}
             to={c.to}
             className="card"
             aria-label={c.label}

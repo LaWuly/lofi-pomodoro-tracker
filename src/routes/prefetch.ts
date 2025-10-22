@@ -1,15 +1,16 @@
+// routes/prefetch.ts
 type Prefetcher = () => Promise<unknown>
 
-// Map
 export const prefetchers: Record<string, Prefetcher> = {
   clock: () => import('../app/clock'),
-  calculator: () => import('../app/calculator'),
-  markdown: () => import('../app/markdown'),
   journal: () => import('../app/journal'),
-  drum: () => import('../app/drum'),
+  workout: () => import('../app/workout'),
+  cycle: () => import('../app/cycle'),
+  recipes: () => import('../app/recipes'),
+  meditation: () => import('../app/meditation'),
+  archive: () => import('../app/archive'),
 }
 
-// Utility
 export type Slug = keyof typeof prefetchers
 
 export function prefetchChunk(key: Slug) {
@@ -21,7 +22,6 @@ export function prefetchChunk(key: Slug) {
     ) => number
     ric(run, { timeout: 1500 })
   } else {
-    // fallback
     setTimeout(run, 0)
   }
 }
