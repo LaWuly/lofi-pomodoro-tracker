@@ -1,4 +1,4 @@
-import MarkdownFCC from '@app/adapters/fcc/MarkdownFCC'
+import MarkdownFCC from '@app/archive/fcc/MarkdownFCC'
 
 export default function MarkdownPage() {
   return <MarkdownFCC />

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useMarkdown } from '@app/markdown/useMarkdown'
-import { sanitize } from '@app/markdown/sanitizeHtml'
+import { useMarkdown } from '@app/archive/markdown/useMarkdown'
+import { sanitize } from '@domain/markdown/sanitizeHtml'
 import styles from './MarkdownFCC.module.css'
 
 export default function MarkdownFCC() {
