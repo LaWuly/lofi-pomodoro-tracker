@@ -1,7 +1,7 @@
 // src/app/markdown/useMarkdown.ts
 import { useMemo, useState } from 'react'
 import { markdownToHtml } from '@domain/markdown/parser'
-import { sanitize } from './sanitizeHtml'
+import { sanitize } from '../../../domain/markdown/sanitizeHtml'
 import { DEFAULT_MD } from '@domain/markdown/sample'
 
 export function useMarkdown(initial: string = DEFAULT_MD) {
