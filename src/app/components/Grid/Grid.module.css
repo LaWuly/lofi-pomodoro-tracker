@@ -1,3 +1,4 @@
+/* Layout wrapper */
 .hub {
     min-height: 100dvh;
     display: grid;
@@ -6,11 +7,13 @@
     padding: 24px;
 }
 
+/* Titolo */
 .hub__title {
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     margin: 0 0 8px;
 }
 
+/* Griglia card */
 .grid {
     --size: 180px;
     display: grid;
@@ -19,31 +22,39 @@
     width: min(980px, 92vw);
 }
 
+/* Card */
 .card {
     display: grid;
     align-content: center;
     justify-items: center;
     gap: 8px;
+
     padding: 20px;
-    text-decoration: none;
-    border-radius: 12px;
-    background: var(--panel, #151515);
-    color: var(--text, #fff);
-    box-shadow: var(--shadow, 0 2px 12px rgba(0, 0, 0, .25));
     min-height: 140px;
+
+    text-decoration: none;
+    color: var(--text);
+    background: var(--panel);
+    border-radius: 12px;
+
+    border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+    box-shadow: var(--shadow);
+
     outline: none;
-    border: 1px solid color-mix(in srgb, #fff 10%, transparent);
+    transition: transform var(--elev), box-shadow var(--elev), border-color var(--elev);
 }
 
 .card:hover {
     transform: translateY(-1px);
-    transition: transform .12s ease;
 }
 
 .card:focus-visible {
-    box-shadow: 0 0 0 3px #88c0ff;
+    /* focus ring coerente col globale */
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
 }
 
+/* Contenuti card */
 .card__emoji {
     font-size: 2rem;
     line-height: 1;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import './grid.css'
+import styles from './Grid.module.css'
 import { prefetchChunk } from '@routes/prefetch'
 import type { Slug } from '@routes/prefetch'
 
@@ -65,22 +65,22 @@ const cards: Card[] = [
 
 export function GridHub() {
   return (
-    <main className="hub" aria-label="Hub applicazioni">
-      <h1 className="hub__title">Life Tracker — Hub</h1>
-      <nav className="grid" aria-label="App disponibili">
+    <main className={styles.hub} aria-label="Hub applicazioni">
+      <h1 className={styles.hub__title}>Life Tracker — Hub</h1>
+      <nav className={styles.grid} aria-label="App disponibili">
         {cards.map((c) => (
           <Link
             key={c.slug}
             to={c.to}
-            className="card"
+            className={styles.card}
             aria-label={c.label}
             onMouseEnter={() => prefetchChunk(c.slug)}
             onFocus={() => prefetchChunk(c.slug)}
           >
-            <span className="card__emoji" aria-hidden="true">
+            <span className={styles.card__emoji} aria-hidden="true">
               {c.emoji}
             </span>
-            <span className="card__title">{c.title}</span>
+            <span className={styles.card__title}>{c.title}</span>
           </Link>
         ))}
       </nav>
