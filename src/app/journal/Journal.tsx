@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import MoodSelector from './MoodSelector'
 import { useJournal } from '@app/hooks/useJournal'
-import { sanitize } from '@app/markdown/sanitizeHtml'
+import { sanitize } from '@domain/markdown/sanitizeHtml'
 import { markdownToHtml } from '@domain/markdown/parser'
 import styles from './Journal.module.css'
 
