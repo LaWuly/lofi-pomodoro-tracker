@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
+import styles from './ThemeToggle.module.css'
+
 type Theme = 'light' | 'dark'
 
 function getSystemPref(): Theme {
@@ -29,20 +31,12 @@ export function ThemeToggle() {
       : 'Passa a tema scuro (crepuscolo/notte)'
 
   return (
-    <div style={{ position: 'fixed', top: 14, right: 14, zIndex: 10 }}>
+    <div className={styles.wrapper}>
       <button
         onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
         aria-label={label}
         title={label}
-        style={{
-          width: 42,
-          height: 42,
-          borderRadius: 999,
-          border: '1px solid rgba(255,255,255,.18)',
-          background: 'rgba(255,255,255,.25)',
-          backdropFilter: 'blur(6px)',
-          boxShadow: 'var(--shadow)',
-        }}
+        className={styles.button}
       >
         {icon}
       </button>
