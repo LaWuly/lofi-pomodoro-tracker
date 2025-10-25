@@ -4,22 +4,36 @@ import {
   tick,
   reset as resetEngine,
 } from '@domain/timer/TimerEngine'
-import type { PomodoroConfig, PomodoroState } from '@domain/timer/types'
+import type { PomodoroConfig, PomodoroState, Phase } from '@domain/timer/types'
+import { formatTime } from '@domain/timer/types'
 
-export function usePomodoro(cfg: PomodoroConfig) {
+type Options = {
+  autoStartBreaks?: boolean
+  autoStartPomodoros?: boolean
+  showHours?: boolean
+}
+
+export function usePomodoro(cfg: PomodoroConfig, opt: Options = {}) {
   const [state, setState] = useState<PomodoroState>(() => initialState(cfg))
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const prevRingingRef = useRef(false)
 
   // 1. Clock
-  const { sessionLength, breakLength, ringHoldSec } = cfg
+  const {
+    sessionLength,
+    shortBreakLength,
+    longBreakLength,
+    longBreakInterval,
+    ringHoldSec,
+  } = cfg
 
   useEffect(() => {
     if (!state.isRunning) return
 
     const configSnap: PomodoroConfig = {
       sessionLength,
-      breakLength,
+      shortBreakLength,
+      longBreakLength,
+      longBreakInterval,
       ringHoldSec,
     }
 
@@ -28,9 +42,17 @@ export function usePomodoro(cfg: PomodoroConfig) {
     }, 1000)
 
     return () => window.clearInterval(id)
-  }, [state.isRunning, sessionLength, breakLength, ringHoldSec])
+  }, [
+    state.isRunning,
+    sessionLength,
+    shortBreakLength,
+    longBreakLength,
+    longBreakInterval,
+    ringHoldSec,
+  ])
 
   // 2. Beep quando entri in ring
+  const prevRingingRef = useRef(state.isRinging)
   useEffect(() => {
     const justEntered = state.isRinging && !prevRingingRef.current
     if (justEntered) {
@@ -40,14 +62,14 @@ export function usePomodoro(cfg: PomodoroConfig) {
           a.currentTime = 0
           void a.play()
         } catch {
-          // alcuni browser richiedono interazione utente: ok per FCC
+          /* alcuni browser richiedono interazione utente */
         }
       }
     }
     prevRingingRef.current = state.isRinging
   }, [state.isRinging])
 
-  // 3. Sync timeLeft quando cambi le durate, solo in pausa
+  // 3. Sync timeLeft
   const isRunningRef = useRef(state.isRunning)
 
   useEffect(() => {
@@ -55,19 +77,51 @@ export function usePomodoro(cfg: PomodoroConfig) {
   }, [state.isRunning])
 
   useEffect(() => {
-    if (isRunningRef.current) return
+    if (isRunningRef.current || state.isRinging) return
 
     const target =
-      state.phase === 'Session' ? cfg.sessionLength * 60 : cfg.breakLength * 60
+      state.phase === 'Session'
+        ? sessionLength * 60
+        : state.phase === 'ShortBreak'
+          ? shortBreakLength * 60
+          : longBreakLength * 60
 
     setState((s) => (s.timeLeft === target ? s : { ...s, timeLeft: target }))
-  }, [cfg.sessionLength, cfg.breakLength, state.phase])
+  }, [
+    sessionLength,
+    shortBreakLength,
+    longBreakLength,
+    state.phase,
+    state.isRinging,
+  ])
 
-  // 4. API minime per la UI
+  // 4. Auto-start dopo il ring (opzionale)
+  const prevPhaseRef = useRef<Phase>(state.phase)
+  useEffect(() => {
+    const phaseChanged = state.phase !== prevPhaseRef.current
+    const exitedRing = !state.isRinging
+    if (phaseChanged && exitedRing) {
+      const shouldRun =
+        (state.phase === 'Session' && opt.autoStartPomodoros) ||
+        ((state.phase === 'ShortBreak' || state.phase === 'LongBreak') &&
+          opt.autoStartBreaks)
+      if (shouldRun) {
+        // prossimo tick, evita race con il cambio fase
+        setTimeout(() => setState((s) => ({ ...s, isRunning: true })), 0)
+      }
+    }
+    prevPhaseRef.current = state.phase
+  }, [
+    state.phase,
+    state.isRinging,
+    opt.autoStartBreaks,
+    opt.autoStartPomodoros,
+  ])
+
+  // 5. API controllo
   const toggleRun = () => setState((s) => ({ ...s, isRunning: !s.isRunning }))
   const reset = () => {
     setState((prev) => resetEngine(prev, cfg))
-    prevRingingRef.current = false
     const a = audioRef.current
     if (a) {
       a.pause()
@@ -75,5 +129,33 @@ export function usePomodoro(cfg: PomodoroConfig) {
     }
   }
 
-  return { state, toggleRun, reset, audioRef }
+  // 6. Cambio fase manuale (ferma il run/ring)
+  const setPhase = (phase: Phase) => {
+    const nextTime =
+      phase === 'Session'
+        ? sessionLength * 60
+        : phase === 'ShortBreak'
+          ? shortBreakLength * 60
+          : longBreakLength * 60
+
+    setState((s) => ({
+      ...s,
+      phase,
+      timeLeft: nextTime,
+      isRunning: false,
+      isRinging: false,
+    }))
+  }
+
+  // 7. Formatting
+  const formattedTime = formatTime(state.timeLeft, opt.showHours ?? false)
+
+  return {
+    state,
+    toggleRun,
+    reset,
+    setPhase,
+    formattedTime,
+    audioRef,
+  }
 }
