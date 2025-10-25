@@ -6,14 +6,33 @@ const clamp = (v: number) => Math.min(60, Math.max(1, v))
 const fmt = (s: number) =>
   `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 
+// Config "FCC" locale (session + break)
+type FCCCfg = {
+  sessionLength: number
+  breakLength: number
+  ringHoldSec: number
+}
+
 export function TimerFCC() {
-  const [cfg, setCfg] = useState({
+  const [cfg, setCfg] = useState<FCCCfg>({
     sessionLength: 25,
     breakLength: 5,
     ringHoldSec: 1,
   })
 
-  const { state, toggleRun, reset, audioRef } = usePomodoro(cfg)
+  // 🔁 Adapter FCC -> PomodoroConfig (domain)
+  const pomoCfg = useMemo(
+    () => ({
+      sessionLength: cfg.sessionLength,
+      shortBreakLength: cfg.breakLength,
+      longBreakLength: cfg.breakLength, // stesso valore: FCC non distingue
+      longBreakInterval: 0, // 0 = disattiva i long break
+      ringHoldSec: cfg.ringHoldSec,
+    }),
+    [cfg],
+  )
+
+  const { state, toggleRun, reset, audioRef } = usePomodoro(pomoCfg)
 
   // Azioni FCC ± (disabilitate durante il run)
   const incBreak = () =>
@@ -45,6 +64,9 @@ export function TimerFCC() {
 
   // Classe fase per colorare la card
   const phaseClass = state.phase === 'Session' ? styles.session : styles.break
+
+  // Per FCC, etichetta "Break" quando non è Session
+  const phaseLabel = state.phase === 'Session' ? 'Session' : 'Break'
 
   // Memo per il tempo formattato
   const timeText = useMemo(() => fmt(state.timeLeft), [state.timeLeft])
@@ -135,7 +157,7 @@ export function TimerFCC() {
 
         {/* Timer */}
         <section className={styles.timer}>
-          <h2 id="timer-label">{state.phase}</h2>
+          <h2 id="timer-label">{phaseLabel}</h2>
           <div id="time-left" className={styles.time} aria-live="polite">
             {timeText}
           </div>
