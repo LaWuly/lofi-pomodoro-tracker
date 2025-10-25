@@ -1,0 +1,380 @@
+/* Layout panel */
+.wrapper {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--bg-grad);
+    color: var(--text);
+}
+
+.container {
+    width: min(1100px, 100%);
+    min-height: clamp(520px, 68dvh, 780px);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    max-height: calc(100dvh - 48px);
+}
+
+.header {
+    padding: 16px 16px 0;
+}
+
+.title {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+}
+
+/* Tabs */
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px 16px 12px;
+}
+
+.tab {
+    border: 1px solid var(--border);
+    background: var(--surface-2, #fff);
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-align: center;
+    transition: background var(--elev), transform var(--elev), border-color var(--elev);
+}
+
+.tab:hover {
+    transform: translateY(-1px);
+    background: var(--surface-3, rgba(0, 0, 0, .03));
+}
+
+.tabActive {
+    outline: 2px solid var(--ring);
+}
+
+:root[data-theme="dark"] .tab {
+    background: var(--surface-2, #12121c);
+}
+
+/* Pannello contenuti */
+.panel {
+    padding: 16px;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Card */
+.card {
+    background: var(--card-session);
+    border: 1px solid var(--card-session-border);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.cardBreak {
+    background: var(--card-break);
+    border: 1px solid var(--card-break-border);
+}
+
+/* Generici */
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gap16 {
+    gap: 16px;
+}
+
+/* Bottoni */
+.btn {
+    border: 1px solid var(--border);
+    background: var(--surface-2, #fff);
+    color: inherit;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: background var(--elev), border-color var(--elev), transform var(--elev);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    background: var(--surface-3, rgba(0, 0, 0, .03));
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btnPrimary {
+    background: var(--btn-primary);
+    color: var(--btn-primary-fg);
+    border-color: transparent;
+}
+
+.btnPrimary:hover {
+    filter: brightness(1.05);
+}
+
+.btnDanger {
+    background: var(--btn-danger);
+    color: var(--btn-danger-fg);
+    border-color: transparent;
+}
+
+.btnDanger:hover {
+    filter: brightness(1.05);
+}
+
+.btnGhost {
+    background: transparent;
+}
+
+/* KPI */
+.kpi {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.kpiItem {
+    background: var(--surface-2, #fff);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    min-height: 80px;
+}
+
+/* Progress bar */
+.progress {
+    height: 10px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--text) 12%, transparent);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+}
+
+.progressBar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), color-mix(in oklab, var(--primary) 55%, transparent));
+    box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 35%, transparent);
+    transition: width 300ms ease;
+}
+
+/* Form grid (Settings) */
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+@media (max-width: 640px) {
+    .formGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Liste Task */
+.split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: 0;
+}
+
+.twoCols {
+    grid-template-columns: 1fr 1fr;
+}
+
+.split>.card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.listScroll {
+    margin-top: 8px;
+    display: grid;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding-right: 2px;
+}
+
+/* Riga task */
+.taskRow {
+    background: var(--surface-2, #fff);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: 8px;
+    padding: 10px;
+}
+
+.checkCell {
+    padding-top: 2px;
+}
+
+.contentCell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.actionsCell {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.taskTitle {
+    flex: 1 1 auto;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.projectPill {
+    color: #fff;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.pomoCount {
+    font-size: 12px;
+    opacity: .7;
+}
+
+/* Progetti */
+.projectsArea {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+.projectsCard {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+}
+
+.projectsScroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    margin-top: 12px;
+    display: grid;
+    gap: 8px;
+    padding-right: 2px;
+}
+
+/* Tema scuro: superfici */
+:root[data-theme="dark"] .taskRow,
+:root[data-theme="dark"] .card {
+    background: var(--surface-2, #12121c);
+    border-color: var(--border);
+}
+
+/* Focus Timer */
+
+.timerCard {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 32px);
+    background: var(--card-session);
+    border: 1px solid var(--card-session-border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+}
+
+.timerDisplay {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 1;
+    margin: 6px 0 12px;
+    text-shadow: 0 1px 0 color-mix(in oklab, #000 15%, transparent);
+}
+
+.timerCard .progress {
+    height: 12px;
+    margin-top: 6px;
+}
+
+.timerControls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.timerPhaseRow {
+    display: flex;
+    gap: 8px;
+}
+
+/* Player Spotify compatto */
+.spotifyCard {
+    max-width: 420px;
+    margin: 0 0 8px 0;
+    padding: 12px;
+}
+
+/* Timer + Player */
+.timerLayout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
+    align-items: start;
+}
+
+.timerSection {
+    min-width: 0;
+}
+
+.playerSection {
+    min-width: 0;
+}
+
+/* Mobile ================================================================ */
+@media (max-width: 900px) {
+    .timerLayout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .twoCols {
+        grid-template-columns: 1fr;
+    }
+
+    .timerCard {
+        max-width: 100%;
+    }
+}
