@@ -8,18 +8,29 @@ export function initialState(cfg: PomodoroConfig): PomodoroState {
     timeLeft: minutesToSeconds(cfg.sessionLength),
     isRunning: false,
     isRinging: false,
-    ringLeft: 0,
+    ringLeft: Math.max(1, cfg.ringHoldSec ?? 1),
+    completedWork: 0,
   }
 }
 
-// 2. Helper per calcolare prossima fase + tempo
-function nextPhaseAndTime(cfg: PomodoroConfig, cur: Phase) {
-  const nextPhase: Phase = cur === 'Session' ? 'Break' : 'Session'
-  const nextTime =
-    nextPhase === 'Session'
-      ? minutesToSeconds(cfg.sessionLength)
-      : minutesToSeconds(cfg.breakLength)
-  return { phase: nextPhase, timeLeft: nextTime }
+// 2. Prossima fase + tempo
+function nextPhaseAndTime(
+  cfg: PomodoroConfig,
+  cur: Phase,
+  completedWork: number,
+) {
+  if (cur === 'Session') {
+    const nextIsLong =
+      cfg.longBreakInterval > 0 && completedWork % cfg.longBreakInterval === 0
+    const phase: Phase = nextIsLong ? 'LongBreak' : 'ShortBreak'
+    const len = nextIsLong ? cfg.longBreakLength : cfg.shortBreakLength
+    return { phase, timeLeft: minutesToSeconds(len) }
+  } else {
+    return {
+      phase: 'Session' as const,
+      timeLeft: minutesToSeconds(cfg.sessionLength),
+    }
+  }
 }
 
 // 3. Tick
@@ -28,14 +39,24 @@ export function tick(state: PomodoroState, cfg: PomodoroConfig): PomodoroState {
     return state
   }
 
-  // Ring, timer 0.00, switch di fase
+  // Ring
   if (state.isRinging) {
     const nextRing = Math.max(0, state.ringLeft - 1)
     if (nextRing > 0) {
       return { ...state, timeLeft: 0, ringLeft: nextRing }
     } else {
-      const { phase, timeLeft } = nextPhaseAndTime(cfg, state.phase)
-      return { ...state, phase, timeLeft, isRinging: false, ringLeft: 0 }
+      // Switch fase
+      const inc = state.phase === 'Session' ? 1 : 0
+      const nextCW = state.completedWork + inc
+      const { phase, timeLeft } = nextPhaseAndTime(cfg, state.phase, nextCW)
+      return {
+        ...state,
+        phase,
+        timeLeft,
+        isRinging: false,
+        ringLeft: Math.max(1, cfg.ringHoldSec ?? 1),
+        completedWork: nextCW,
+      }
     }
   }
 
@@ -44,9 +65,13 @@ export function tick(state: PomodoroState, cfg: PomodoroConfig): PomodoroState {
     return { ...state, timeLeft: state.timeLeft - 1 }
   }
 
-  // arrivo a 0, avvio ring & hold
-  const hold = Math.max(1, cfg.ringHoldSec ?? 1)
-  return { ...state, isRinging: true, ringLeft: hold, timeLeft: 0 }
+  // Ring
+  return {
+    ...state,
+    isRinging: true,
+    ringLeft: Math.max(1, cfg.ringHoldSec ?? 1),
+    timeLeft: 0,
+  }
 }
 
 // 4. Reset
