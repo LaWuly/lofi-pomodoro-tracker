@@ -8,7 +8,7 @@ import { PomodoroTimer } from './components/PomodoroTimer'
 import { TasksAndProjects } from './components/TasksAndProjects'
 import { Statistics } from './components/Statistics'
 import { Settings } from './components/Settings'
-import { SpotifyEmbed } from '../components/Audio/SpotifyEmbed'
+import { SpotifyEmbed } from './components/SpotifyEmbed'
 
 type Tab = 'timer' | 'tasks' | 'stats' | 'settings'
 
