@@ -1,32 +1,23 @@
 // src/app/clock/ClockPage.tsx
 import { useEffect, useMemo, useState } from 'react'
 import styles from './Clock.module.css'
-import type { Task, Project, PomodoroSession, AppSettings } from './types'
-import { defaultSettings } from './types'
+import type { Task, Project, PomodoroSession } from './types'
 import { loadJSON, saveJSON } from './state'
 import { PomodoroTimer } from './components/PomodoroTimer'
 import { TasksAndProjects } from './components/TasksAndProjects'
 import { Statistics } from './components/Statistics'
-import { Settings } from './components/Settings'
-import { SpotifyEmbed } from './components/SpotifyEmbed'
+import { useAppSettings } from '@app/settings/AppSettingsContext'
 
-type Tab = 'timer' | 'tasks' | 'stats' | 'settings'
+type Tab = 'timer' | 'tasks' | 'stats'
+const TABS: Tab[] = ['timer', 'tasks', 'stats']
 
-// Storage keys
 const K_TASKS = 'pomodoro-tasks'
 const K_PROJECTS = 'pomodoro-projects'
 const K_SESSIONS = 'pomodoro-sessions'
-const K_SETTINGS = 'pomodoro-settings'
 const K_CURRENT_TASK = 'pomodoro-current-task'
 const K_ACTIVE_TAB = 'pomodoro-active-tab'
 
-// Retrocompatibilità impostazioni
-function normalizeSettings(s: AppSettings): AppSettings {
-  return { ...defaultSettings, ...s }
-}
-
 export function ClockPage() {
-  // Stato persistente
   const [tasks, setTasks] = useState<Task[]>(() =>
     loadJSON<Task[]>(K_TASKS, []),
   )
@@ -36,25 +27,46 @@ export function ClockPage() {
   const [sessions, setSessions] = useState<PomodoroSession[]>(() =>
     loadJSON<PomodoroSession[]>(K_SESSIONS, []),
   )
-  const [settings, setSettings] = useState<AppSettings>(() =>
-    normalizeSettings(loadJSON<AppSettings>(K_SETTINGS, defaultSettings)),
-  )
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(() =>
     loadJSON<string | null>(K_CURRENT_TASK, null),
   )
-  const [activeTab, setActiveTab] = useState<Tab>(() =>
-    loadJSON<Tab>(K_ACTIVE_TAB, 'timer'),
-  )
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    const v = loadJSON<Tab | 'settings'>(K_ACTIVE_TAB, 'timer')
+    return v === 'settings' ? 'timer' : (v as Tab)
+  })
 
-  // Persistenza in localStorage
+  // ✅ ora le impostazioni arrivano dal context globale
+  const {
+    state: { settings },
+  } = useAppSettings()
+
+  // Persistenza locale (tasks, projects, sessions, tab, current task)
   useEffect(() => saveJSON(K_TASKS, tasks), [tasks])
   useEffect(() => saveJSON(K_PROJECTS, projects), [projects])
   useEffect(() => saveJSON(K_SESSIONS, sessions), [sessions])
-  useEffect(() => saveJSON(K_SETTINGS, settings), [settings])
   useEffect(() => saveJSON(K_CURRENT_TASK, currentTaskId), [currentTaskId])
   useEffect(() => saveJSON(K_ACTIVE_TAB, activeTab), [activeTab])
 
-  // CRUD Task
+  // Sanity: se il tab non è valido, torna a 'timer'
+  useEffect(() => {
+    if (!TABS.includes(activeTab)) setActiveTab('timer')
+  }, [activeTab])
+
+  // 🔗 ascolta le richieste di cambio tab dalla TopBar (type-safe)
+  useEffect(() => {
+    const onSetTab = (e: Event) => {
+      const ce = e as CustomEvent<Tab>
+      const next = ce.detail
+      if (TABS.includes(next) && next !== activeTab) {
+        setActiveTab(next)
+      }
+    }
+    window.addEventListener('clock:setTab', onSetTab as EventListener)
+    return () =>
+      window.removeEventListener('clock:setTab', onSetTab as EventListener)
+  }, [activeTab])
+
+  // CRUD Task/Project/Session
   const addTask = (task: Omit<Task, 'id' | 'createdAt'>) => {
     const newTask: Task = {
       ...task,
@@ -73,7 +85,6 @@ export function ClockPage() {
     if (currentTaskId === id) setCurrentTaskId(null)
   }
 
-  // CRUD Project
   const addProject = (project: Omit<Project, 'id' | 'createdAt'>) => {
     const newProject: Project = {
       ...project,
@@ -94,7 +105,6 @@ export function ClockPage() {
     )
   }
 
-  // Log sessioni
   const addSession = (session: Omit<PomodoroSession, 'id' | 'completedAt'>) => {
     const newSession: PomodoroSession = {
       ...session,
@@ -110,7 +120,6 @@ export function ClockPage() {
     }
   }
 
-  // Derivati
   const currentTask = useMemo(
     () => tasks.find((t) => t.id === currentTaskId),
     [tasks, currentTaskId],
@@ -120,38 +129,9 @@ export function ClockPage() {
     return projects.find((p) => p.id === currentTask.projectId) ?? null
   }, [currentTask, projects])
 
-  // Render
   return (
-    <section className={styles.wrapper} aria-labelledby="clock-title">
-      {/* Header con Tabs (no card) */}
-      <header className={styles.header}>
-        <h2 id="clock-title" className={styles.title}>
-          25+5 Clock (Pro)
-        </h2>
-
-        <nav
-          className={styles.tabs}
-          role="tablist"
-          aria-label="Sezioni Pomodoro"
-        >
-          {(['timer', 'tasks', 'stats', 'settings'] as const).map((tab) => (
-            <button
-              key={tab}
-              role="tab"
-              aria-selected={activeTab === tab}
-              className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ''}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab === 'timer' && '⏱ Timer'}
-              {tab === 'tasks' && '📝 Task & Progetti'}
-              {tab === 'stats' && '📊 Statistiche'}
-              {tab === 'settings' && '⚙️ Impostazioni'}
-            </button>
-          ))}
-        </nav>
-      </header>
-
-      {/* Contenuto tab (no card) */}
+    <section className={styles.wrapper}>
+      {/* Nessun header/tabs qui: è tutto nella TopBar */}
       <main className={styles.panel}>
         {activeTab === 'timer' && (
           <div className={styles.timerLayout}>
@@ -166,9 +146,6 @@ export function ClockPage() {
                 tasks={tasks}
                 projects={projects}
               />
-            </div>
-            <div className={styles.playerSection}>
-              <SpotifyEmbed settings={settings} />
             </div>
           </div>
         )}
@@ -190,10 +167,6 @@ export function ClockPage() {
 
         {activeTab === 'stats' && (
           <Statistics sessions={sessions} tasks={tasks} projects={projects} />
-        )}
-
-        {activeTab === 'settings' && (
-          <Settings settings={settings} onUpdateSettings={setSettings} />
         )}
       </main>
     </section>
