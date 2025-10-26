@@ -8,7 +8,7 @@ import { PomodoroTimer } from './components/PomodoroTimer'
 import { TasksAndProjects } from './components/TasksAndProjects'
 import { Statistics } from './components/Statistics'
 import { Settings } from './components/Settings'
-import { SpotifyEmbed } from './components/SpotifyEmbed'
+import { SpotifyEmbed } from '../components/Audio/SpotifyEmbed'
 
 type Tab = 'timer' | 'tasks' | 'stats' | 'settings'
 
@@ -22,10 +22,7 @@ const K_ACTIVE_TAB = 'pomodoro-active-tab'
 
 // Retrocompatibilità impostazioni
 function normalizeSettings(s: AppSettings): AppSettings {
-  return {
-    ...defaultSettings,
-    ...s,
-  }
+  return { ...defaultSettings, ...s }
 }
 
 export function ClockPage() {
@@ -66,13 +63,11 @@ export function ClockPage() {
     }
     setTasks((prev) => [...prev, newTask])
   }
-
   const updateTask = (id: string, updates: Partial<Task>) => {
     setTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...updates } : t)),
     )
   }
-
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id))
     if (currentTaskId === id) setCurrentTaskId(null)
@@ -87,13 +82,11 @@ export function ClockPage() {
     }
     setProjects((prev) => [...prev, newProject])
   }
-
   const updateProject = (id: string, updates: Partial<Project>) => {
     setProjects((prev) =>
       prev.map((p) => (p.id === id ? { ...p, ...updates } : p)),
     )
   }
-
   const deleteProject = (id: string) => {
     setProjects((prev) => prev.filter((p) => p.id !== id))
     setTasks((prev) =>
@@ -101,7 +94,7 @@ export function ClockPage() {
     )
   }
 
-  // Log sessioni (per statistiche)
+  // Log sessioni
   const addSession = (session: Omit<PomodoroSession, 'id' | 'completedAt'>) => {
     const newSession: PomodoroSession = {
       ...session,
@@ -109,8 +102,6 @@ export function ClockPage() {
       completedAt: Date.now(),
     }
     setSessions((prev) => [...prev, newSession])
-
-    // aggiorna contatore task se è lavoro
     if (session.type === 'work' && session.taskId) {
       const t = tasks.find((x) => x.id === session.taskId)
       updateTask(session.taskId, {
@@ -129,88 +120,82 @@ export function ClockPage() {
     return projects.find((p) => p.id === currentTask.projectId) ?? null
   }, [currentTask, projects])
 
-  // Render -------------------------------
+  // Render
   return (
     <section className={styles.wrapper} aria-labelledby="clock-title">
-      <div className={styles.container}>
-        {/* Header con Tabs */}
-        <header className={styles.header}>
-          <h2 id="clock-title" className={styles.title}>
-            25+5 Clock (Pro)
-          </h2>
+      {/* Header con Tabs (no card) */}
+      <header className={styles.header}>
+        <h2 id="clock-title" className={styles.title}>
+          25+5 Clock (Pro)
+        </h2>
 
-          <nav
-            className={styles.tabs}
-            role="tablist"
-            aria-label="Sezioni Pomodoro"
-          >
-            {(['timer', 'tasks', 'stats', 'settings'] as const).map((tab) => (
-              <button
-                key={tab}
-                role="tab"
-                aria-selected={activeTab === tab}
-                className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab === 'timer' && '⏱ Timer'}
-                {tab === 'tasks' && '📝 Task & Progetti'}
-                {tab === 'stats' && '📊 Statistiche'}
-                {tab === 'settings' && '⚙️ Impostazioni'}
-              </button>
-            ))}
-          </nav>
-        </header>
+        <nav
+          className={styles.tabs}
+          role="tablist"
+          aria-label="Sezioni Pomodoro"
+        >
+          {(['timer', 'tasks', 'stats', 'settings'] as const).map((tab) => (
+            <button
+              key={tab}
+              role="tab"
+              aria-selected={activeTab === tab}
+              className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab === 'timer' && '⏱ Timer'}
+              {tab === 'tasks' && '📝 Task & Progetti'}
+              {tab === 'stats' && '📊 Statistiche'}
+              {tab === 'settings' && '⚙️ Impostazioni'}
+            </button>
+          ))}
+        </nav>
+      </header>
 
-        {/* Contenuto tab */}
-        <main className={styles.panel}>
-          {/* TIMER + PLAYER */}
-          {activeTab === 'timer' && (
-            <div className={styles.timerLayout}>
-              <div className={styles.timerSection}>
-                <PomodoroTimer
-                  settings={settings}
-                  currentTask={currentTask}
-                  currentProject={currentProject ?? undefined}
-                  onSessionComplete={addSession}
-                  onTaskChange={setCurrentTaskId}
-                  onAddTask={addTask}
-                  tasks={tasks}
-                  projects={projects}
-                />
-              </div>
-              <div className={styles.playerSection}>
-                <SpotifyEmbed settings={settings} />
-              </div>
+      {/* Contenuto tab (no card) */}
+      <main className={styles.panel}>
+        {activeTab === 'timer' && (
+          <div className={styles.timerLayout}>
+            <div className={styles.timerSection}>
+              <PomodoroTimer
+                settings={settings}
+                currentTask={currentTask}
+                currentProject={currentProject ?? undefined}
+                onSessionComplete={addSession}
+                onTaskChange={setCurrentTaskId}
+                onAddTask={addTask}
+                tasks={tasks}
+                projects={projects}
+              />
             </div>
-          )}
+            <div className={styles.playerSection}>
+              <SpotifyEmbed settings={settings} />
+            </div>
+          </div>
+        )}
 
-          {/* TASK & PROGETTI */}
-          {activeTab === 'tasks' && (
-            <TasksAndProjects
-              tasks={tasks}
-              projects={projects}
-              onAddTask={addTask}
-              onUpdateTask={updateTask}
-              onDeleteTask={deleteTask}
-              currentTaskId={currentTaskId}
-              onSetCurrentTask={setCurrentTaskId}
-              onAddProject={addProject}
-              onUpdateProject={updateProject}
-              onDeleteProject={deleteProject}
-            />
-          )}
+        {activeTab === 'tasks' && (
+          <TasksAndProjects
+            tasks={tasks}
+            projects={projects}
+            onAddTask={addTask}
+            onUpdateTask={updateTask}
+            onDeleteTask={deleteTask}
+            currentTaskId={currentTaskId}
+            onSetCurrentTask={setCurrentTaskId}
+            onAddProject={addProject}
+            onUpdateProject={updateProject}
+            onDeleteProject={deleteProject}
+          />
+        )}
 
-          {/* STATISTICHE */}
-          {activeTab === 'stats' && (
-            <Statistics sessions={sessions} tasks={tasks} projects={projects} />
-          )}
+        {activeTab === 'stats' && (
+          <Statistics sessions={sessions} tasks={tasks} projects={projects} />
+        )}
 
-          {/* IMPOSTAZIONI */}
-          {activeTab === 'settings' && (
-            <Settings settings={settings} onUpdateSettings={setSettings} />
-          )}
-        </main>
-      </div>
+        {activeTab === 'settings' && (
+          <Settings settings={settings} onUpdateSettings={setSettings} />
+        )}
+      </main>
     </section>
   )
 }

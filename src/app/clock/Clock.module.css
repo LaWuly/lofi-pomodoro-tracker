@@ -1,28 +1,26 @@
-/* Layout panel */
+/* === Layout pagina full-screen (no card) =============================== */
 .wrapper {
     min-height: 100dvh;
     display: grid;
-    place-items: center;
+    grid-template-rows: auto 1fr;
+    /* header | contenuto */
     padding: 24px;
     background: var(--bg-grad);
     color: var(--text);
 }
 
-.container {
+/* (rimosso) .container — non serve più */
+
+/* Centra il contenuto su larghezza leggibile senza card */
+.header,
+.panel {
     width: min(1100px, 100%);
-    min-height: clamp(520px, 68dvh, 780px);
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    max-height: calc(100dvh - 48px);
+    margin-inline: auto;
 }
 
+/* Header + Tabs */
 .header {
-    padding: 16px 16px 0;
+    padding: 0 0 8px;
 }
 
 .title {
@@ -30,12 +28,11 @@
     font-size: 1.25rem;
 }
 
-/* Tabs */
 .tabs {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
-    padding: 8px 16px 12px;
+    padding: 0 0 12px;
 }
 
 .tab {
@@ -62,15 +59,20 @@
 
 /* Pannello contenuti */
 .panel {
-    padding: 16px;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
-    gap: 16px;
+    /* niente bordo/ombra: non è più una card */
+    padding: 16px 0;
+    /* padding verticale */
     min-height: 0;
+    /* abilita scroll figlio */
     overflow: hidden;
+    /* lascia scroll ai figli che lo richiedono */
+    display: grid;
+    grid-template-rows: 1fr;
+    /* lascia al contenuto decidere */
+    gap: 16px;
 }
 
-/* Card */
+/* — Card “logiche” DOPO: se vuoi ancora evidenziare aree, tienile — */
 .card {
     background: var(--card-session);
     border: 1px solid var(--card-session-border);
@@ -302,7 +304,6 @@
 }
 
 /* Focus Timer */
-
 .timerCard {
     max-width: 720px;
     margin: 0 auto;
@@ -362,7 +363,7 @@
     min-width: 0;
 }
 
-/* Mobile ================================================================ */
+/* Mobile */
 @media (max-width: 900px) {
     .timerLayout {
         grid-template-columns: 1fr;
