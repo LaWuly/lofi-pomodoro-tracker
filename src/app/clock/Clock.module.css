@@ -1,17 +1,10 @@
-/* === Layout pagina full-screen (no card) =============================== */
+/* Layout pagina full-screen */
 .wrapper {
-    min-height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    /* header | contenuto */
-    padding: 24px;
-    background: var(--bg-grad);
-    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-/* (rimosso) .container — non serve più */
-
-/* Centra il contenuto su larghezza leggibile senza card */
 .header,
 .panel {
     width: min(1100px, 100%);
@@ -20,7 +13,7 @@
 
 /* Header + Tabs */
 .header {
-    padding: 0 0 8px;
+    padding: 16px 16px 0;
 }
 
 .title {
@@ -29,10 +22,7 @@
 }
 
 .tabs {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    padding: 0 0 12px;
+    display: block;
 }
 
 .tab {
@@ -57,22 +47,22 @@
     background: var(--surface-2, #12121c);
 }
 
-/* Pannello contenuti */
+/* Pannello contenuto */
 .panel {
-    /* niente bordo/ombra: non è più una card */
-    padding: 16px 0;
-    /* padding verticale */
-    min-height: 0;
-    /* abilita scroll figlio */
-    overflow: hidden;
-    /* lascia scroll ai figli che lo richiedono */
-    display: grid;
-    grid-template-rows: 1fr;
-    /* lascia al contenuto decidere */
-    gap: 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: auto;
 }
 
-/* — Card “logiche” DOPO: se vuoi ancora evidenziare aree, tienile — */
+.panel:has(.timerLayout) {
+    display: grid;
+    place-items: center;
+    padding-block: 24px;
+}
+
 .card {
     background: var(--card-session);
     border: 1px solid var(--card-session-border);
@@ -116,6 +106,11 @@
     opacity: .6;
     cursor: not-allowed;
     transform: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
 }
 
 .btnPrimary {
@@ -353,6 +348,20 @@
     grid-template-columns: 1fr 300px;
     gap: 16px;
     align-items: start;
+    width: 100%;
+}
+
+/* Fallback senza :has() via classe JS */
+.timerLayout.noPlayer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.timerLayout:not(:has(.playerSection > *)) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
 }
 
 .timerSection {
@@ -363,10 +372,54 @@
     min-width: 0;
 }
 
+/* Contenitore tabs */
+.segmented {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 9999px;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    max-width: 960px;
+    margin-inline: auto;
+}
+
+/* Pulsanti singoli */
+.segItem {
+    min-width: 180px;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text);
+    font-weight: 600;
+    text-align: center;
+    transition: background var(--elev), transform var(--elev);
+}
+
+.segItem:hover {
+    transform: translateY(-1px);
+}
+
+.segItem:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.segActive {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .04) inset;
+}
+
 /* Mobile */
 @media (max-width: 900px) {
     .timerLayout {
         grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: center;
     }
 }
 

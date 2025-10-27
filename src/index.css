@@ -210,24 +210,26 @@ button {
 
 /* Layout app */
 .wrapper {
+  min-height: 100vh;
   min-height: 100dvh;
   display: grid;
-  place-items: center;
-  padding: 24px;
+  place-items: stretch;
+  padding: 0;
   background: var(--bg-grad);
   color: var(--text);
 }
 
 .container {
-  inline-size: var(--app-w);
-  block-size: var(--app-h);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  overflow: clip;
+  inline-size: 100%;
+  block-size: 100dvh;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
   display: grid;
   grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
 /* Controlli globali (input, select, color, etc.) */
@@ -267,17 +269,9 @@ textarea:focus-visible {
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
-  /* Firefox */
 }
 
 /* Chrome, Safari, Edge */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  appearance: none;
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -297,8 +291,6 @@ select {
   align-items: center;
   line-height: 1.4;
 }
-
-
 
 /* Color picker */
 input[type="color"] {
@@ -335,5 +327,19 @@ textarea {
 
   .container {
     block-size: auto;
+  }
+}
+
+/* TopBar layout  */
+.container> :nth-child(2) {
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }

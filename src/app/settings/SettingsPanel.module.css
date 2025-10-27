@@ -1,0 +1,101 @@
+/* Backdrop */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 15, .35);
+    backdrop-filter: blur(2px);
+    z-index: 40;
+}
+
+/* Drawer */
+.panel {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    width: clamp(360px, 46vw, 720px);
+    height: 100dvh;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    overflow: hidden;
+    animation: slideIn .18s ease-out both;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(12px);
+        opacity: .0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Close */
+.close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border-radius: 10px;
+    height: 36px;
+    padding: 0 10px;
+}
+
+/* Sidebar */
+.side {
+    border-right: 1px solid var(--border);
+    background: var(--surface-2);
+    padding: 12px 10px;
+    display: grid;
+    align-content: start;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.sideLink {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    text-align: left;
+    padding: 8px 6px;
+    border-radius: 8px;
+    font: inherit;
+    opacity: .9;
+    cursor: pointer;
+    width: 100%;
+}
+
+.sideLink:hover {
+    background: color-mix(in oklab, var(--text) 8%, transparent);
+    opacity: 1;
+}
+
+.active {
+    font-weight: 600;
+    border-left: 2px solid var(--ring);
+    padding-left: 8px;
+}
+
+/* Contenuto */
+.content {
+    padding: 16px;
+    overflow: auto;
+    display: grid;
+    gap: 12px;
+}

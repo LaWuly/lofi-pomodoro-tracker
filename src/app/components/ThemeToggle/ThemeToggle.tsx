@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import styles from './ThemeToggle.module.css'
 
 type Theme = 'light' | 'dark'
 
@@ -11,7 +10,7 @@ function getSystemPref(): Theme {
     : 'light'
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme | null
     return saved ?? getSystemPref()
@@ -31,15 +30,14 @@ export function ThemeToggle() {
       : 'Passa a tema scuro (crepuscolo/notte)'
 
   return (
-    <div className={styles.wrapper}>
-      <button
-        onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-        aria-label={label}
-        title={label}
-        className={styles.button}
-      >
-        {icon}
-      </button>
-    </div>
+    <button
+      onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+      aria-label={label}
+      title={label}
+      className={className}
+      type="button"
+    >
+      {icon}
+    </button>
   )
 }

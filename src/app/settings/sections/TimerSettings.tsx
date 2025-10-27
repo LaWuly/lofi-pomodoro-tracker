@@ -1,7 +1,6 @@
-// src/app/clock/components/Settings.tsx
-import styles from '../Clock.module.css'
-import type { AppSettings } from '../types'
-import { defaultSettings } from '../types'
+import s from './TimerSettings.module.css'
+import type { AppSettings } from '../../clock/types'
+import { defaultSettings } from '../../clock/types'
 
 // helper: parse + clamp numeri da input
 function num(v: string, fallback: number, min: number, max: number) {
@@ -27,14 +26,19 @@ export function Settings({
     })
 
   return (
-    <div className={styles.panel}>
-      {/* Durate */}
-      <div className={styles.card}>
-        <b>Durate</b>
-        <div className={styles.row} style={{ marginTop: 8 }}>
-          <label htmlFor="focusMin">
-            Focus (min)
+    <div className={s.wrap}>
+      <h3 className={s.title}>⚙️ Impostazioni Timer</h3>
+
+      {/* === Durate ======================================================= */}
+      <section className={s.section} aria-labelledby="durate">
+        <h4 id="durate" className={s.h4}>
+          Durate
+        </h4>
+        <div className={s.row}>
+          <label className={s.inline} htmlFor="focusMin">
+            <span>Focus (min)</span>
             <input
+              className={s.input}
               id="focusMin"
               type="number"
               inputMode="numeric"
@@ -51,9 +55,10 @@ export function Settings({
             />
           </label>
 
-          <label htmlFor="shortBreakMin">
-            Pausa breve
+          <label className={s.inline} htmlFor="shortBreakMin">
+            <span>Pausa breve</span>
             <input
+              className={s.input}
               id="shortBreakMin"
               type="number"
               inputMode="numeric"
@@ -70,9 +75,10 @@ export function Settings({
             />
           </label>
 
-          <label htmlFor="longBreakMin">
-            Pausa lunga
+          <label className={s.inline} htmlFor="longBreakMin">
+            <span>Pausa lunga</span>
             <input
+              className={s.input}
               id="longBreakMin"
               type="number"
               inputMode="numeric"
@@ -89,9 +95,10 @@ export function Settings({
             />
           </label>
 
-          <label htmlFor="longBreakInterval">
-            Intervallo pausa lunga
+          <label className={s.inline} htmlFor="longBreakInterval">
+            <span>Intervallo pausa lunga</span>
             <input
+              className={s.input}
               id="longBreakInterval"
               type="number"
               inputMode="numeric"
@@ -108,61 +115,66 @@ export function Settings({
             />
           </label>
         </div>
-      </div>
+      </section>
 
-      {/* Automazioni */}
-      <div className={styles.card}>
-        <b>Automazioni</b>
-        <div className={styles.row} style={{ marginTop: 8 }}>
-          <label htmlFor="autoBreaks">
+      {/* === Automazioni ================================================== */}
+      <section className={s.section} aria-labelledby="auto">
+        <h4 id="auto" className={s.h4}>
+          Automazioni
+        </h4>
+        <div className={s.row}>
+          <label className={s.inline} htmlFor="autoBreaks">
             <input
               id="autoBreaks"
               type="checkbox"
               checked={settings.autoStartBreaks}
               onChange={(e) => upd('autoStartBreaks', e.target.checked)}
-            />{' '}
-            Avvia pause automaticamente
+            />
+            <span>Avvia pause automaticamente</span>
           </label>
 
-          <label htmlFor="autoPomos">
+          <label className={s.inline} htmlFor="autoPomos">
             <input
               id="autoPomos"
               type="checkbox"
               checked={settings.autoStartPomodoros}
               onChange={(e) => upd('autoStartPomodoros', e.target.checked)}
-            />{' '}
-            Avvia pomodori automaticamente
+            />
+            <span>Avvia pomodori automaticamente</span>
           </label>
         </div>
-      </div>
+      </section>
 
-      {/* Notifiche & Audio */}
-      <div className={styles.card}>
-        <b>Notifiche &amp; Audio</b>
-        <div className={styles.row} style={{ marginTop: 8 }}>
-          <label htmlFor="deskNotif">
+      {/* === Notifiche & Audio =========================================== */}
+      <section className={s.section} aria-labelledby="notify-audio">
+        <h4 id="notify-audio" className={s.h4}>
+          Notifiche &amp; Audio
+        </h4>
+        <div className={s.row}>
+          <label className={s.inline} htmlFor="deskNotif">
             <input
               id="deskNotif"
               type="checkbox"
               checked={settings.notificationsEnabled}
               onChange={(e) => upd('notificationsEnabled', e.target.checked)}
-            />{' '}
-            Notifiche desktop
+            />
+            <span>Notifiche desktop</span>
           </label>
 
-          <label htmlFor="tickSound">
+          <label className={s.inline} htmlFor="tickSound">
             <input
               id="tickSound"
               type="checkbox"
               checked={settings.tickingSoundEnabled}
               onChange={(e) => upd('tickingSoundEnabled', e.target.checked)}
-            />{' '}
-            Suono ticchettio (placeholder)
+            />
+            <span>Suono ticchettio (placeholder)</span>
           </label>
 
-          <label htmlFor="volume">
-            Volume
+          <label className={s.inline} htmlFor="volume">
+            <span>Volume</span>
             <input
+              className={s.range}
               id="volume"
               type="range"
               min={0}
@@ -179,23 +191,24 @@ export function Settings({
           </label>
         </div>
 
-        <div
-          className={styles.row}
-          style={{ justifyContent: 'flex-end', marginTop: 8 }}
-        >
-          <button type="button" className={styles.btn} onClick={reset}>
+        <div className={s.row} style={{ justifyContent: 'flex-end' }}>
+          <button type="button" className={s.btn} onClick={reset}>
             Ripristina
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Spotify */}
-      <div className={styles.card}>
-        <b>🎵 Spotify</b>
-        <div className={styles.row} style={{ marginTop: 8 }}>
-          <label htmlFor="spotifyUrl" style={{ flex: 1 }}>
-            URL playlist / album / brano
+      {/* === Spotify ====================================================== */}
+      <section className={s.section} aria-labelledby="spotify">
+        <h4 id="spotify" className={s.h4}>
+          🎵 Spotify
+        </h4>
+
+        <div className={s.row}>
+          <label className={s.inline} htmlFor="spotifyUrl" style={{ flex: 1 }}>
+            <span>URL playlist / album / brano</span>
             <input
+              className={s.input}
               id="spotifyUrl"
               type="text"
               placeholder="https://open.spotify.com/..."
@@ -205,36 +218,35 @@ export function Settings({
             />
           </label>
 
-          <label
-            htmlFor="spotifyEnabled"
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-          >
+          <label className={s.inline} htmlFor="spotifyEnabled">
             <input
               id="spotifyEnabled"
               type="checkbox"
               checked={settings.spotifyEnabled ?? false}
               onChange={(e) => upd('spotifyEnabled', e.target.checked)}
             />
-            Mostra player
+            <span>Mostra player</span>
           </label>
         </div>
-      </div>
+      </section>
 
-      {/* Formato timer */}
-      <div className={styles.card}>
-        <b>⏱ Formato timer</b>
-        <div className={styles.row} style={{ marginTop: 8 }}>
-          <label htmlFor="showHours">
+      {/* === Formato timer =============================================== */}
+      <section className={s.section} aria-labelledby="format">
+        <h4 id="format" className={s.h4}>
+          ⏱ Formato timer
+        </h4>
+        <div className={s.row}>
+          <label className={s.inline} htmlFor="showHours">
             <input
               id="showHours"
               type="checkbox"
               checked={settings.showHours ?? false}
               onChange={(e) => upd('showHours', e.target.checked)}
-            />{' '}
-            Mostra ore (hh:mm:ss)
+            />
+            <span>Mostra ore (hh:mm:ss)</span>
           </label>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

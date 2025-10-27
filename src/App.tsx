@@ -1,11 +1,18 @@
 import { AppRoutes } from './routes/AppRoutes'
-import { ThemeToggle } from '@app/components/ThemeToggle/ThemeToggle'
+import { AppSettingsProvider } from '@app/settings/AppSettingsContext'
+import { TopBar } from '@app/components/TopBar/TopBar'
+import { SettingsPanel } from '@app/settings/SettingsPanel'
 
 export default function App() {
   return (
-    <>
-      <ThemeToggle />
-      <AppRoutes />
-    </>
+    <div className="wrapper">
+      <div className="container">
+        <AppSettingsProvider>
+          <TopBar />
+          <AppRoutes />
+          <SettingsPanel />
+        </AppSettingsProvider>
+      </div>
+    </div>
   )
 }
