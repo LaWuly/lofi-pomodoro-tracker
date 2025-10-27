@@ -1,0 +1,156 @@
+/* Quick Music Menu */
+.menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: clamp(360px, 360px + 5vw, 460px);
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 16px 18px 18px;
+    display: grid;
+    gap: 14px;
+    z-index: 50;
+    /* sopra backdrop/pannelli */
+    animation: fadeIn 0.12s ease-out both;
+    box-sizing: border-box;
+    color: var(--text);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Righe */
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* === Bottoni Player (Spotify / Ambience) */
+.btn {
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--btn-hover);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.active {
+    background: color-mix(in oklab, var(--ring) 25%, var(--btn-bg));
+    border-color: var(--ring);
+    font-weight: 600;
+}
+
+/* Checkbox mini-player */
+.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* Gruppi/Sezioni */
+.group {
+    display: grid;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+}
+
+.label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* Pills (playlist / ambience) */
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill {
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border-radius: 9999px;
+    padding: 6px 14px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.pill:hover {
+    background: var(--btn-hover);
+}
+
+.pill:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.pillActive {
+    outline: 2px solid var(--ring);
+}
+
+/* Testi Secondari */
+.hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+/* Link */
+.link {
+    margin-top: 6px;
+    justify-self: end;
+    background: transparent;
+    color: var(--primary);
+    border: none;
+    text-decoration: underline;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.link:hover {
+    background: color-mix(in oklab, var(--primary) 15%, transparent);
+}
+
+.link:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
