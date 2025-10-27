@@ -1,8 +1,9 @@
 import styles from './TopBar.module.css'
 import { ThemeToggle } from '@app/components/ThemeToggle/ThemeToggle'
 import { useAppSettings } from '@app/settings/AppSettingsContext'
-import { SpotifyPlayer } from '@app/components/Audio/SpotifyPlayer'
-import { AmbiencePlayer } from '@app/components/Audio/AmbiencePlayer'
+import { SpotifyPlayer } from '@app/music/SpotifyPlayer'
+import { toEmbedUrl } from '@app/music/spotify'
+import { AmbiencePlayer } from '@app/music/AmbiencePlayer'
 import { useLocation } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import MusicQuickMenu from './MusicQuickMenu'
@@ -94,6 +95,12 @@ export function TopBar() {
     music.playlists.find((p) => p.id === music.activeSpotifyId) ?? null
   const activeAmb =
     music.ambiencePresets.find((a) => a.id === music.activeAmbienceId) ?? null
+
+  const activeSpotifyUrl = useMemo(
+    () => (activePl?.url ? toEmbedUrl(activePl.url) : null),
+    [activePl?.url],
+  )
+
   const appTitle = useAppTitle()
   const showClockNav = useMemo(
     () => pathname.startsWith('/apps/clock'),
@@ -124,7 +131,7 @@ export function TopBar() {
         {music.showMiniPlayer && (
           <div className={styles.inlinePlayer}>
             {isSpotify ? (
-              <SpotifyPlayer url={activePl?.url ?? null} size="compact" />
+              <SpotifyPlayer url={activeSpotifyUrl} size="compact" />
             ) : (
               <AmbiencePlayer src={activeAmb?.src ?? ''} compact />
             )}

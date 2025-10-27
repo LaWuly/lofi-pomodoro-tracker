@@ -222,7 +222,6 @@ button {
 .container {
   inline-size: 100%;
   block-size: 100dvh;
-  /* rimosso 100vh duplicato */
   background: transparent;
   border: none;
   border-radius: 0;

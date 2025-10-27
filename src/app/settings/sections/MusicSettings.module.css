@@ -1,0 +1,198 @@
+/* Layout */
+.wrap {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+    padding: 16px 18px 24px;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.title {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Sezioni */
+.section {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.h4 {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+/* Controlli */
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Toggle (Spotify / Ambience) */
+.seg {
+    display: inline-flex;
+    border: 1px solid var(--btn-border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.segBtn {
+    height: 36px;
+    min-width: 120px;
+    padding: 0 14px;
+    border: none;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.segBtn+.segBtn {
+    border-left: 1px solid var(--btn-border);
+}
+
+.segBtn:hover {
+    background: var(--btn-hover);
+}
+
+.segBtn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.segActive {
+    background: color-mix(in oklab, var(--ring) 25%, var(--btn-bg));
+    font-weight: 600;
+}
+
+/* Input & Buttons */
+.input {
+    min-width: 220px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+}
+
+.btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--btn-hover);
+}
+
+.btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.btnDanger {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--danger, #ff8fa0);
+    background: color-mix(in oklab, var(--danger, #ff8fa0) 12%, transparent);
+    color: var(--btn-fg);
+    cursor: pointer;
+}
+
+/* Stati */
+.active,
+.pillActive {
+    outline: 2px solid var(--ring);
+}
+
+/* Lista Playlist */
+.list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.itemRow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.itemActions {
+    display: inline-flex;
+    gap: 6px;
+}
+
+/* Ambience presets (pill) */
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill {
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border-radius: 999px;
+    padding: 6px 14px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.pill:hover {
+    background: var(--btn-hover);
+}
+
+.pill:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.note {
+    color: var(--muted);
+    margin: 4px 0 0 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
