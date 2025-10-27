@@ -1,0 +1,135 @@
+/* Layout */
+.wrap {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+    padding: 16px 18px 24px;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.title {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Sezioni */
+.section {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.h4 {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+/* Righe e controlli */
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Input & Buttons */
+.input {
+    min-width: 220px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+}
+
+.btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--btn-hover);
+}
+
+.btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+/* Range */
+.range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    width: 180px;
+    border-radius: 999px;
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    outline: none;
+}
+
+.range:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+}
+
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--btn-fg);
+    border: 1px solid var(--btn-border);
+    cursor: pointer;
+}
+
+.range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--btn-fg);
+    border: 1px solid var(--btn-border);
+    cursor: pointer;
+}
+
+.range::-webkit-slider-thumb:hover,
+.range::-moz-range-thumb:hover {
+    filter: brightness(1.1);
+}
+
+/* Note */
+.note {
+    color: var(--muted);
+    margin: 4px 0 0 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
