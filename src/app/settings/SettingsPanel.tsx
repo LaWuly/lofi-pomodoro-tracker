@@ -1,6 +1,10 @@
+// src/app/settings/SettingsPanel.tsx
 import { useMemo } from 'react'
 import { useAppSettings, type SettingsSection } from './AppSettingsContext'
 import styles from './SettingsPanel.module.css'
+
+import { MusicSettingsPanel } from '@app/settings/sections/MusicSettings'
+import { Settings as TimerSettings } from '@app/settings/sections/TimerSettings'
 
 export function SettingsPanel() {
   const { isSettingsOpen, closeSettings, initialSection } = useAppSettings()
@@ -63,31 +67,37 @@ function Sidebar() {
 }
 
 function Content({ initial }: { initial: SettingsSection }) {
+  const {
+    state: { settings },
+    setSettings,
+  } = useAppSettings()
+
   const view = useMemo(() => initial, [initial])
 
-  if (view === 'music')
+  if (view === 'music') {
     return (
       <div className={styles.content}>
-        <h3>Musica</h3>
-        <p>Impostazioni Musica.</p>
+        <MusicSettingsPanel />
       </div>
     )
+  }
 
-  if (view === 'timer')
+  if (view === 'timer') {
     return (
       <div className={styles.content}>
-        <h3>Pomodoro Timer</h3>
-        <p>Impostazioni Pomodoro.</p>
+        <TimerSettings settings={settings} onUpdateSettings={setSettings} />
       </div>
     )
+  }
 
-  if (view === 'workout')
+  if (view === 'workout') {
     return (
       <div className={styles.content}>
         <h3>Workout</h3>
         <p>Impostazioni Workout.</p>
       </div>
     )
+  }
 
   return (
     <div className={styles.content}>
